@@ -1,0 +1,180 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+
+# Confidence Intervals for One Population Parameter
+
+In this chapter, we will explore how to construct confidence intervals for one-parameter population values, such as the population mean or proportion. In Chapter 6, we discussed how to derive a point estimate for a population parameter. Since each sample may produce a different point estimate, it's essential to account for the inherent randomness in this process. Confidence intervals provide a way to quantify the uncertainty associated with these estimates by creating a range of plausible values for the parameter, rather than relying on a single estimate. This approach gives us a more reliable method to assess the precision of our estimates.
+
+## Basic Concepts of Confidence Intervals
+
+In Chapter 6, we examined how to find a point estimate for an unknown population parameter. When reporting point estimates, it is important to note the amount of uncertainty associated with the point estimate. This is especially key when we want to do Statistical Inference.
+
+We will examine two methods of Statistical Inference:
+
+- Confidence Intervals
+
+- Hypothesis Tests
+
+
+:::{.definition}
+A ***confidence interval*** is a range of values, derived from sample data, that reflects the uncertainty associated with an estimate of an unknown population parameter. It provides an interval within which the parameter is likely to fall, with a specified level of confidence (e.g., 95%). The confidence level indicates the probability that the interval will contain the true parameter in repeated sampling.
+:::
+
+There are many flavors of confidence intervals:
+
+- Some are one-sided while others are two-sided
+- Some assume population variance is known while others do not
+- Some assume a higher confidence level while others assume a lower confidence level
+
+\newpage
+
+***General Form of a Confidence Interval (Two-Sided)***
+
+\vfill
+
+:::{.definition}
+$\alpha$ is the probability that a confidence interval from repeated sampling does not contain the true population parameter. It represents the likelihood of the confidence interval failing to capture the parameter in repeated samples, and is equal to $1 - \text{confidence level}$.
+:::
+
+***Illustration***
+
+\vfill
+
+:::{.example}
+Suppose we collect a random sample and use it to create a confidence interval. Further, suppose that we do this process 100 times and create 100 confidence intervals.
+:::
+
+\vfill
+
+\newpage
+
+***Deriving a Confidence Interval***
+
+:::{.example}
+Suppose we want to create a two-sided 95\% confidence interval for $\mu$.
+:::
+
+\vfill
+
+
+***Writing and Interpreting a Confidence Interval***
+
+Here's how to write confidence intervals:
+
+\vfill
+
+Here's how to interpret confidence intervals:
+
+\vfill
+
+\newpage
+
+## Large-Sample Confidence Intervals for a Population Mean and Proportion
+
+The Central Limit Theorem states that $Z = (\bar{X}-\mu)/(\sigma/\sqrt{n})$ has an approximately standard normal distribution.
+
+We can use this result to produce a confidence interval since $P(-z_{\alpha/2} < \frac{\bar{X}-\mu}{\sigma/\sqrt{n}} < z_{\alpha/2} ) \approx 1 - \alpha$.
+
+:::{.theorem}
+If our random sample comes from a normal distribution and $\sigma$ is known, then a  $100(1-\alpha)\%$ confidence interval for $\mu$ is given by:
+${\bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}}$
+:::
+
+If $n$ is large, then we don't require normality. We will come to this case in the next section. This type of confidence interval can also be called a ***large-sample confidence interval***.
+
+:::{.example}
+A random sample of 16 CPU chips has a total of 342 defects. Suppose we know the population standard deviation is 4.52 and also that the number of defects/chip is approximately normally distributed.
+:::
+
+(a) Calculate a point estimate for $\mu$, the true mean number of defects/chip.
+
+\vfill
+
+(b) Calculate a 95\% CI for $\mu$.
+
+\vfill
+
+\newpage
+
+:::{.example}
+Suppose that GPAs are approximately normally distributed with population variance $\sigma^2=1.2$. If we take a random sample of 12 students and find a sample mean of 2.87. Construct a 90\% confidence interval for $\mu$.
+:::
+
+\vfill
+
+
+
+\newpage
+
+## Intervals Based on a Normal Population Distribution
+
+In this section, we will assume that both $\mu$ and $\sigma$ are unknown.
+
+Recall that the Central Limit Theorem stated that $Z = (\bar{X}-\mu)/(\sigma/\sqrt{n})$ has an approximately standard normal distribution. 
+
+If $\sigma$ is unknown, then $t = (\bar{X}-\mu)/(s/\sqrt{n})$ does ***not*** have a normal distribution.
+
+:::{.definition}
+The ***t-distribution*** is a probability distribution used in statistics that is similar to the normal distribution but has heavier tails. It is typically used when estimating population parameters when the sample size is small and/or the population standard deviation is unknown. The t-distribution becomes closer to the normal distribution as the sample size increases. $t_{k}$ denotes a t-distribution with $k$ degrees of freedom.
+:::
+
+
+***Properties of the t-distribution***
+
+- Each $t_{k}$ curve is bell-shaped and centered at zero.
+- Each $t_{k}$ curve has more spread than the standard normal curve.
+- As $k$ increases, the spread of the corresponding $t_{k}$ curve decreases.
+- As $k \to \infty$, the sequence of $t_{k}$ curves approaches the standard normal curve.
+
+:::{.example}
+Find $t^*$ such that the area under the curve to the right of $t^*$ is 0.025 for $df=10$.
+:::
+
+\vfill
+
+:::{.example} 
+Find $t^*$ such that the area under the curve to the left of $t^*$ is 0.05 for $df=14$.
+:::
+
+\vfill
+
+:::{.example} 
+Find the two values, $t_1$ and $t_2$, such that the area under the curve is the middle 95\% for $df=24$.
+:::
+
+\vfill
+
+:::{.example}
+Suppose $t^*=2.1$ and $df=9$. Calculate $P(t(9) \geq t^*)$.
+:::
+
+\vfill
+
+\newpage
+
+:::{.theorem}
+If $\bar{X}$ is the mean of a random sample of size n from an (approximately) normal distribution with mean $\mu$ and sample standard devitation $s$, then $t = (\bar{X}-\mu)/(s/\sqrt{n})$ follows a t-distribution with (n-1) degrees of freedom.
+:::
+
+:::{.theorem}
+Let $\bar{x}$ and s be the sample mean and sample standard deviation from a random sample from a (approximately) normal population with mean $\mu$. Then a  $100(1-\alpha)\%$ confidence interval for $\mu$ is given by:
+${\bar{x} \pm t_{\alpha/2} \cdot \frac{s}{\sqrt{n}}\text{, df=n-1}}$
+:::
+
+:::{.example}
+Suppose a random sample of 30 Hummers have a mean of 9.8 miles/gallon (MPG) and a sample standard deviation of 2.2. Compute a 95\% confidence interval for $\mu$.
+:::
+
+\vfill
+
+:::{.example}
+Suppose a random sample of 17 Priuses have a mean of 52.3 MPG and variance of 14.9. Construct a 99\% confidence interval for $\mu$.
+:::
+
+\vfill
+

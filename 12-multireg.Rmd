@@ -1,0 +1,521 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(formatR)
+library(tidyverse)
+library(kableExtra)
+
+# Set so that long lines in R will be wrapped:
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=FALSE)
+knitr::opts_chunk$set(cache=TRUE,warning=F)
+knitr::opts_chunk$set(out.height='40%',fig.align = "center")
+add.space = 0
+
+# kable table global setup
+kt = function(data) {
+  kable(data, align = "c", escape = FALSE) %>%
+    kable_styling(bootstrap_options = c("striped"),
+                  latex_options = c("hold_position"))
+}
+```
+
+# Multiple Regression
+
+In Chapter 11, we explored simple linear regression to predict a quantitative variable, \( y \), using a single predictor, \( x \). Multiple regression expands this approach by incorporating two or more predictor variables, enabling more comprehensive models. This chapter introduces techniques like variable transformations to improve linearity, interaction terms to capture relationships between predictors, and polynomial regression for modeling curved trends. We also explore model selection strategies to identify the most effective combination of predictors for accurate, reliable predictions.
+
+## Multiple Regression Model
+
+Multiple regression (MR) extends simple linear regression by allowing for multiple predictor variables to model a single response variable.
+
+**Population Models for SLR and MR:**
+
+**SLR:** $y = \beta_0 + \beta_1 x_1 + \epsilon$
+
+**MR:** $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \ldots + \beta_p x_p + \epsilon$ 
+
+**Estimated Regression Equations for SLR and MR:**
+
+**SLR:** $\hat{y} = b_0 + b_1 x_1$
+
+**MR:** $\hat{y} = b_0 + b_1 x_1 + b_2 x_2 + \ldots + b_p x_p$
+
+\newpage
+
+**Assumptions for Multiple Regression**
+
+1. **Errors (Independence and Normality)**: The errors (\(\epsilon_i\)) should be independent and identically distributed normal random variables with a mean of 0 and a constant variance (\(\sigma^2\)). This assumption ensures that the residuals are not systematically related to each other, which can lead to biased estimates.
+
+2. **Linearity**: The mean of the response variable is assumed to be a linear combination of the predictor variables. This means the relationship between the predictors and the response should be approximately linear. Residual plots can help identify whether this assumption holds.
+
+3. **Homoscedasticity (Constant Variance of Errors)**: The errors should have constant variance across all levels of the predictor variables. If the variance of the residuals increases or decreases with the value of the predictors (i.e., heteroscedasticity), it indicates potential issues. A residual plot can help detect heteroscedasticity—look for a "fanning out" or "fanning in" pattern, which suggests non-constant variance.
+
+
+**Note**: While estimated regression coefficients can be calculated using matrix methods from linear algebra, we will focus on using R for these calculations.
+
+\newpage
+
+:::{.example}
+The "trees" dataset in R provides measurements of the girth, height, and volume of 31 timber in 31 felled black cherry trees. We can fit a basic linear regression model with height and girth as predictor variables in R as follows.
+:::
+
+```{r,echo=F}
+library(scatterplot3d)
+data(trees)
+s3d = scatterplot3d(trees, color = "blue",
+angle = 55, scale.y = 0.7, pch = 16)
+my.lm = lm(trees$Volume ~ trees$Girth + trees$Height)
+s3d$plane3d(my.lm)
+```
+
+```{r}
+data(trees)
+mod = lm(Volume~Height+Girth,data=trees)
+summary(mod)
+```
+
+\newpage
+
+**F-test for Overall Model (Model Utility Test)**
+
+We want to test if any of our predictor variables ($x_i's$) are linearly related to the response variable (y).
+
+If we have $p$ predictor variables, then our hypotheses will be:
+
+\vfill
+
+$\boxed{F_{test} = \frac{MSR}{MSE}, df_1 = p, df_2 = n-p-1}$
+
+This will only tell us if any of our predictors are linearly related to the response, not which ones.
+
+:::{.example}
+Using the output from the previous page, complete an F-test for overall model for the cherry trees dataset.
+:::
+
+\vfill \vfill \vfill \vfill
+
+\newpage
+
+**t-test for Individual Predictors**
+
+If we reject $H_o$ in our F-test, then we conclude that one or more of our predictor variables is linearly related to our response variable.
+
+We can complete t-tests for each predictor to determine which are useful/significant. For example, we can test an individual predictor with the following hypothesis test:
+
+\vfill
+
+$\boxed{t_{test} = \frac{b_i}{s_{b_i}}, df = n-p-1}$
+
+\smallskip
+
+**Rule of Thumb:** If \( \beta_i \) is not significantly different from zero (p-value \( \geq \alpha \)), consider dropping that predictor from the model. However, evaluate practical significance and model context before removing variables entirely.
+
+
+:::{.example}
+Using the output from the previous page, complete t-tests for individual predictors (height and diameter).
+:::
+
+\vfill \vfill
+
+**Interpreting the model estimates ($b_i$)**
+
+\vfill \vfill
+
+
+:::{.example}
+Interpret $b_2$ from the cherry trees example in the context of the problem.
+:::
+
+\vfill \vfill
+
+\newpage
+
+## Variable Transformations
+
+Sometimes a nonlinear regression function is appropriate which may require us to transform the data. An example of such a nonlinearity is given below.
+
+**Transforming Response Variable**
+
+:::{.example}
+A colony of bacteria is exposed to X-rays and the number of surviving bacteria, $n$, at time $t$ are recorded. Let's examine the data, the SLR line of best fit, and a residual plot.
+:::
+
+| $t$  | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |
+|------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| $n_t$| 355 | 211 | 197 | 166 | 142 | 166 | 104 | 60  | 56  | 38  | 36  | 32  | 21  | 19  | 15  |
+
+
+```{r, echo=F}
+t = 1:15
+n = c(355,211,197,166,142,166,104,60,56,38,36,32,21,19,15)
+par(mfrow=c(1,2))
+plot(n~t,pch=19)
+bact.lm = lm(n~t)
+abline(bact.lm)
+plot(bact.lm,which=1)
+```
+
+By inspection, the line of best fit does not seem appropriate. Additionally, the residual plot suggests that the data has a nonlinearity.
+
+\newpage
+
+Instead, we could consider the following model: $n_t = n_0 \cdot e^{\beta t}$.
+
+If we take the natural log of each side of this model, we get: $ln(n_t) = ln(n_0) + ln(e^{\beta t}) = \alpha + \beta t$.
+
+| $t$          | 1    | 2    | 3    | 4    | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   |
+|--------------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|
+| $ln(n_t)$    | 5.87 | 5.35 | 5.28 | 5.11 | 4.96 | 5.11 | 4.64 | 4.09 | 4.03 | 3.64 | 3.58 | 3.47 | 3.04 | 2.94 | 2.71 |
+
+
+After making this transformation, we can refit the regression model with a much more appropriate model.
+
+
+```{r, echo=F}
+t = 1:15
+n = c(355,211,197,166,142,166,104,60,56,38,36,32,21,19,15)
+logn = log(n)
+
+par(mfrow=c(1,3))
+plot(logn~t,pch=19,ylab="log(n)")
+bact.lm2 = lm(logn~t)
+abline(bact.lm2)
+
+plot(n~t,pch=19)
+n.fitted = fitted(bact.lm2)
+lines(x=t,y=exp(n.fitted))
+
+plot(bact.lm2,which=1)
+```
+
+
+\newpage
+
+A regression model is considered **intrinsically linear** if, through a transformation on \( Y \) or \( X_i \), it can be expressed as a linear regression model of the form \( y' = \beta_0 + \beta_1 x' + \epsilon' \).
+
+**Examples:**
+
+1. \( y = \alpha e^{\beta x} \cdot \epsilon \) transforms to \( \ln(y) = y' = \beta_0 + \beta_1 x' + \epsilon' \), where \( x' = x \), \( \beta_0 = \ln(\alpha) \), \( \beta_1 = \beta \), and \( \epsilon' = \ln(\epsilon) \).
+
+2. \( y = \alpha x^\beta \cdot \epsilon \) transforms to \( \log(y) = y' = \beta_0 + \beta_1 x' + \epsilon' \), where \( x' = \log(x) \), \( \beta_0 = \log(\alpha) \), \( \beta_1 = \beta \), and \( \epsilon' = \log(\epsilon) \).
+
+
+**Box-Cox Transformation**
+
+If the linearity or constant variance assumptions are violated, consider using a **Box-Cox transformation** to find an appropriate transformation for the response variable. This method can help determine the best power transformation to improve the model fit, making it more linear and stabilizing variance. The `boxcox()` function in R can be used to explore possible transformations.
+
+```{r}
+library(MASS)
+boxcox(n~t)
+```
+
+
+\newpage
+
+**Transforming Predictor Variables**
+
+We can also transform our predictor variables, $X_i$, if a nonlinear model is appropriate. Consider the following example with a quadratic relationship.
+
+:::{.example}
+From Newtonian Physics, acceleration of an object in free fall drops a distance that is proportional to the square of the elapsed time. Consider the following dataset in which an object's dropped distance as a function of time and some measurement error is present.
+:::
+
+| $t$   | 0   | 1   | 2   | 3   | 4    | 5     | 6     | 7     | 8     | 9     | 10    |
+|-------|-----|-----|-----|-----|------|-------|-------|-------|-------|-------|-------|
+| $d_t$ | 0   | 8.7 | 20.6 | 37.1 | 82.2 | 120.9 | 177.5 | 244.2 | 310.1 | 399.0 | 480.6 |
+
+First, we will fit the model $d = b_0 + b_1 t$ and then compare this model with a quadratic model, $d = b_0 + b_1 t^2$.
+
+```{r}
+t = 0:10
+d = c(0,8.7,20.6,37.1,82.2,120.9,177.5,244.2,310.1,399.0,480.6)
+lm1 = lm(d~t)
+lm2 = lm(d~I(t^2))
+```
+
+```{r,echo=F,out.height="20%"}
+t = 0:10
+d = c(0,8.7,20.6,37.1,82.2,120.9,177.5,244.2,310.1,399.0,480.6)
+lm1 = lm(d~t)
+lm2 = lm(d~I(t^2))
+par(mfrow=c(1,2))
+plot(d~t,pch=19,main="Linear")
+abline(lm1)
+plot(lm1,which=1)
+```
+
+```{r,echo=F,out.height="20%"}
+lm2 = lm(d~I(t^2))
+lm2.fitted = fitted(lm2)
+par(mfrow=c(1,2))
+plot(d~t,pch=19,main="Quadratic")
+lines(lm2.fitted~t)
+plot(lm2,which=1)
+```
+
+By inspection, the quadratic model seems more appropriate in terms of the line of best fit and in terms of the residuals.
+
+\vfill
+
+\newpage
+
+## Categorical Variables, Interaction, and Polynomial Regression
+
+**Categorical Variables**
+
+Categorical variables can be easily incorporated in a regression model. In fact, ANOVA from chapter 10 can be thought of as a regression on a categorical variable.
+
+:::{.example}
+The following dataset in R was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models).
+:::
+
+```{r}
+data(mtcars)
+head(mtcars,n=4)
+```
+
+To include a categorical variable in a regression model, you need to designate it as a "factor" variable in R. Let's fit a multiple regression model with miles per gallon as the response variable, weight as a continuous predictor, and the number of cylinders (4, 6, or 8) as a categorical predictor.
+
+```{r}
+mt.lm = lm(mpg~wt+factor(cyl),data=mtcars)
+summary(mt.lm)
+```
+
+\newpage
+
+:::{.example}
+For the Motor Trends car example, answer the following questions.
+:::
+
+(a) Write the estimated multiple regression equation.
+
+\vfill
+
+(b) What is the estimated MPG for a car that weighs 2.900 (thousands of pounds) and has 4 cylinders.
+
+\vfill
+
+(c) What is the estimated difference in MPG between an 8-cylinder car and a 6-cylinder car?
+
+\vfill
+
+(d) Interpret the estimated regression coefficients in the context of the problem.
+
+\vfill
+
+\newpage
+
+**Interaction**
+
+If the effect of one predictor variable on the response variable depends on other predictor variables, we may want to include an **interaction variable**.
+
+:::{.example}
+Let's fit the following model: $MPG = b_0 + b_1 \cdot Weight + b_2 \cdot I(am) + b_3 \cdot Weight \cdot I(am)$, where the ``am'' variable is 0 for an automatic transmission and 1 is for a manual transmission.
+:::
+
+```{r}
+lm.int = lm(mpg~wt*factor(am),data=mtcars)
+summary(lm.int)
+```
+
+\newpage
+
+## Polynomial regression
+
+There is flexibility in a regression model to fit an arbitrary polynomial to the data, however, we must take care to not "overfit" the data.
+
+The **hierarchical principle** in polynomial regression states that if a model includes a higher-order term (e.g., \(x^2\)), it should also include all lower-order terms (e.g., \(x\)), even if their coefficients are not statistically significant. This ensures the model is mathematically valid and interpretable, as excluding lower-order terms can distort the relationship between the predictor and the response. However, in certain cases, lower-order terms may be omitted if there is a domain-specific justification, such as theoretical knowledge or practical constraints that support the exclusion.
+
+:::{.example}
+Let's generate a toy dataset based a cubic polynomial and see how successfully we can recover the original function.
+:::
+
+```{r,echo=F}
+set.seed(2020)
+x = sort(runif(n=100,min=-10,max=10))
+y = 1/2*x^3 - x^2 - 2 + rnorm(100,sd=10)
+toydata = cbind(x,y)
+head(toydata)
+```
+
+```{r,echo=F}
+plot(y~x,pch=19)
+```
+
+\newpage
+
+```{r,echo=F}
+lm.cubic = lm(y~x+I(x^2)+I(x^3))
+summary(lm.cubic)
+plot(y~x,pch=19)
+fitted.cubic = fitted(lm.cubic)
+lines(fitted.cubic~x,type="l",lwd=3,col="blue")
+```
+
+\newpage
+
+## Model and Variable Selection
+
+Here are some considerations when completing model and variable selection.
+
+1. **Statistical Significance** — Consider removing predictors with high p-values, as they may not contribute significantly to explaining the variation in the response variable. However, be cautious of multicollinearity, as it can impact p-values.
+
+2. **Theoretical and Domain Knowledge** — Use knowledge of the field to guide variable selection. Some variables may be essential based on theory, even if their statistical contribution appears marginal.
+
+3. **Practical Significance** — Beyond statistical tests, evaluate each variable’s real-world relevance. Retain variables that are meaningful in the context of the problem, even if their statistical significance is lower.
+
+4. **Multicollinearity** — Check for high correlations among predictors, as multicollinearity can inflate standard errors and obscure true relationships. Removing or combining correlated variables can improve model stability.
+
+5. **Model Parsimony** — Aim for simplicity by retaining only essential variables, as simpler models are often more interpretable and less prone to overfitting. Use metrics like Adjusted \( R^2 \), AIC, or BIC to balance fit with model complexity.
+
+\bigskip
+
+
+:::{.example}
+Returning to the cherry trees example, let’s consider the following regression models for predicting tree volume:
+
+**Model 1:** $\widehat{\text{volume}} = b_0 + b_1 \cdot \text{Height} + b_2 \cdot \text{Diameter}$
+
+**Model 2:** $\widehat{\text{volume}} = b_0 + b_1 \cdot \text{Height} + b_2 \cdot \text{Diameter}^2$
+
+**Model 3:** $\widehat{\text{volume}} = b_0 + b_1 \cdot \text{Height} \cdot \text{Diameter}^2$
+
+**Model 4:** $\widehat{\text{volume}} = b_1 \cdot \text{Height} \cdot \text{Diameter}^2$
+
+Which model is preferred?
+:::
+
+
+Model 4 aligns well with our understanding that volume is proportional to \( \text{Height} \times \text{Diameter}^2 \). But how could we determine the best model if we didn’t already know this relationship? This is where model selection techniques come in, allowing us to evaluate and compare models based on the data alone, without prior knowledge of the underlying formula.
+
+\newpage
+
+
+```{r}
+lm1 = lm(Volume~Height+Girth,data=trees)
+summary(lm1)
+```
+
+
+```{r}
+lm2 = lm(Volume~Height+I(Girth^2),data=trees)
+summary(lm2)
+```
+
+\newpage
+
+
+```{r}
+lm3 = lm(Volume~Height:I(Girth^2),data=trees)
+summary(lm3)
+```
+
+
+```{r}
+lm4 = lm(Volume~Height:I(Girth^2)-1,data=trees)
+summary(lm4)
+```
+
+\newpage
+
+**Model Residuals**
+
+How can model residuals help us pick the appropriate model?
+
+```{r,echo=F}
+par(mfrow = c(2, 2))
+plot(lm1, which = 1, main = "Model 1")
+plot(lm2, which = 1, main = "Model 2")
+plot(lm3, which = 1, main = "Model 3")
+plot(lm4, which = 1, main = "Model 4")
+
+```
+
+\newpage
+
+## Other Considerations
+
+**1. Multicollinearity** — When two or more predictor variables are highly correlated, it can lead to large standard errors, making it difficult to assess the individual significance of each predictor. This may result in predictors appearing insignificant, even if they are relevant to the model.
+
+**2. Dependent Errors** — If the errors (residuals) are correlated, the model may be inadequate, as this violates the assumption of independence in regression. In such cases, a **time series model** may be more appropriate. For example, stock prices often exhibit high autocorrelation (i.e., errors are highly correlated), which indicates the need for specialized models designed to account for time-based dependencies.
+
+**3. Confounding Variables** — Excluding important variables from a model can lead to incorrect inferences, as confounding variables may influence both the predictor and response variables. For instance, in the example of shark attacks and ice cream sales, there appeared to be a strong relationship between the two. However, the true underlying factor was the temperature: warmer days increase both swimming (leading to more shark interactions) and ice cream sales. Failing to account for such confounding variables can lead to misleading conclusions.
+
+**4. Outliers and Influential Points** — Outliers or points with high leverage can disproportionately impact the model, skewing results or making the model appear significant when it isn’t. Identifying and investigating outliers can help determine whether to keep them, transform the data, or adjust the model.
+
+**5. Overfitting** — Adding too many predictors can lead to overfitting, where the model performs well on the sample data but poorly on new data. Techniques like cross-validation, adjusted \( R^2 \), and criteria such as AIC or BIC can help assess the model's generalizability and prevent overfitting.
+
+**6. Data Scaling and Centering** — Predictor variables on vastly different scales can lead to numerical instability and difficulty interpreting coefficients, especially with interaction terms. Scaling or centering predictors can help stabilize the model and improve interpretability. 
+
+\newpage
+
+## R Companion for Chapter 12
+
+:::{.example}
+The \textbf{longley} dataset is provide in the base version of R and is a macroeconomic data set which provides a well-known example for a highly collinear regression. This dataset includes 7 economical variables, observed yearly from 1947 to 1962 (n=16). For more information on the variables, enter \textbf{?longley} into R.
+:::
+
+Let's begin by looking at the header of the dataset and calculating the correlation matrix. 
+
+<<setup2, include=FALSE, cache=FALSE, tidy=TRUE>>=
+options(tidy=TRUE, width=90)
+@
+
+```{r}
+data(longley)
+
+# show first few observations
+head(longley)
+
+# round the correlations to two decimal places for better viewing
+round(cor(longley),2)
+```
+
+```{r}
+options(tidy=TRUE, width=70)
+```
+
+\newpage
+
+For this example, we will use \textbf{Employed} (number of people employed) as the response variable and the other six variables as predictor variables.\
+
+Let's begin by using all six predictor variables and fitting the multiple regression model.
+
+```{r}
+model1 = lm(Employed~GNP.deflator+GNP+Unemployed+Armed.Forces+Population+Year,
+           data=longley)
+summary(model1)
+```
+
+As can be seen in the above output, three variables (\textbf{GNP.deflator}, \textbf{GNP}, and \textbf{Population}) are not significant.
+
+\newpage
+
+Let's take a stepwise approach, remove the variable with the largest p-value that is not statistically significant, and refit the model. In this case, let's remove the predictor variable \textbf{GNP.deflator} and refit the multiple regression model.
+
+```{r}
+model2 = lm(Employed~GNP+Unemployed+Armed.Forces+Population+Year,
+           data=longley)
+summary(model2)
+```
+
+\newpage
+
+The \textbf{Population} variable is again statistically not significant and has the largest p-value, so let's remove that from the model.
+
+```{r}
+model3 = lm(Employed~GNP+Unemployed+Armed.Forces+Year,
+           data=longley)
+summary(model3)
+```
+
+All of the predictor variables are now statistically significant at $\alpha=0.05$.\
+
+Note that $R^2 = 0.9954$, so 99.54\% of the variability in the number of employed people can be explained by the linear relationship with gross national product (GNP), number of unemployed people, number of people in the armed forces, and year. This is a very large value for $R^2$ which suggests a very good model fit.\
+
+One caution is that our predictor variables are highly correlated (see correlation matrix at the beginning of the example), so this could result in high standard errors. This concern of \textbf{multicollinearity} is beyond the scope of this class and is covered in more advanced statistics courses.
+
+

@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 12 Multiple Regression | STAT 315 Notes</title>
+  <meta name="description" content="Chapter 12 Multiple Regression | STAT 315 Notes" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 12 Multiple Regression | STAT 315 Notes" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 12 Multiple Regression | STAT 315 Notes" />
+  
+  
+  
+
+<meta name="author" content="Colorado State University" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simple-linear-regression.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preliminaries</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#getting-started-with-r"><i class="fa fa-check"></i>Getting Started With R</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#installing-r"><i class="fa fa-check"></i>Installing R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html"><i class="fa fa-check"></i><b>1</b> Basic Concepts of Statistics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#populations-samples-and-processes"><i class="fa fa-check"></i><b>1.1</b> Populations, Samples, and Processes</a></li>
+<li class="chapter" data-level="1.2" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#methods-of-collecting-a-sample"><i class="fa fa-check"></i><b>1.2</b> Methods of Collecting a Sample</a></li>
+<li class="chapter" data-level="1.3" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#types-of-data"><i class="fa fa-check"></i><b>1.3</b> Types of Data</a></li>
+<li class="chapter" data-level="1.4" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#summarizing-qualitative-data"><i class="fa fa-check"></i><b>1.4</b> Summarizing Qualitative Data</a></li>
+<li class="chapter" data-level="1.5" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#visualizing-quantitative-data"><i class="fa fa-check"></i><b>1.5</b> Visualizing Quantitative Data</a></li>
+<li class="chapter" data-level="1.6" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#summary-statistics-for-quantitative-data"><i class="fa fa-check"></i><b>1.6</b> Summary Statistics for Quantitative Data</a></li>
+<li class="chapter" data-level="1.7" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#notation-for-population-parameters-and-sample-statistics"><i class="fa fa-check"></i><b>1.7</b> Notation for Population Parameters and Sample Statistics</a></li>
+<li class="chapter" data-level="1.8" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#descriptive-statistics-vs.-inferential-statistics"><i class="fa fa-check"></i><b>1.8</b> Descriptive Statistics vs. Inferential Statistics</a></li>
+<li class="chapter" data-level="1.9" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#r-companion-for-chapter-1"><i class="fa fa-check"></i><b>1.9</b> R Companion for Chapter 1</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>2</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="probability.html"><a href="probability.html#sample-space-and-events"><i class="fa fa-check"></i><b>2.1</b> Sample Space and Events</a></li>
+<li class="chapter" data-level="2.2" data-path="probability.html"><a href="probability.html#set-theory"><i class="fa fa-check"></i><b>2.2</b> Set Theory</a></li>
+<li class="chapter" data-level="2.3" data-path="probability.html"><a href="probability.html#axioms-and-rules-of-probability"><i class="fa fa-check"></i><b>2.3</b> Axioms and Rules of Probability</a></li>
+<li class="chapter" data-level="2.4" data-path="probability.html"><a href="probability.html#counting-techniques"><i class="fa fa-check"></i><b>2.4</b> Counting Techniques</a></li>
+<li class="chapter" data-level="2.5" data-path="probability.html"><a href="probability.html#conditional-probability"><i class="fa fa-check"></i><b>2.5</b> Conditional Probability</a></li>
+<li class="chapter" data-level="2.6" data-path="probability.html"><a href="probability.html#independence"><i class="fa fa-check"></i><b>2.6</b> Independence</a></li>
+<li class="chapter" data-level="2.7" data-path="probability.html"><a href="probability.html#objective-vs.-subjective-probability"><i class="fa fa-check"></i><b>2.7</b> Objective vs. Subjective Probability</a></li>
+<li class="chapter" data-level="2.8" data-path="probability.html"><a href="probability.html#r-companion-for-chapter-2"><i class="fa fa-check"></i><b>2.8</b> R Companion for Chapter 2</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html"><i class="fa fa-check"></i><b>3</b> Discrete Random Variables</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#random-variables"><i class="fa fa-check"></i><b>3.1</b> Random Variables</a></li>
+<li class="chapter" data-level="3.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#probability-distributions-for-discrete-random-variables"><i class="fa fa-check"></i><b>3.2</b> Probability Distributions for Discrete Random Variables</a></li>
+<li class="chapter" data-level="3.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expected-values-means"><i class="fa fa-check"></i><b>3.3</b> Expected Values (Means)</a></li>
+<li class="chapter" data-level="3.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#bernoulli-and-binomial-random-variables"><i class="fa fa-check"></i><b>3.4</b> Bernoulli and Binomial Random Variables</a></li>
+<li class="chapter" data-level="3.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#geometric-discrete-uniform-and-poisson-random-variables"><i class="fa fa-check"></i><b>3.5</b> Geometric, Discrete Uniform, and Poisson Random Variables</a></li>
+<li class="chapter" data-level="3.6" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#r-companion-for-chapter-3"><i class="fa fa-check"></i><b>3.6</b> R Companion for Chapter 3</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html"><i class="fa fa-check"></i><b>4</b> Continuous Random Variables</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#probability-density-function-pdf"><i class="fa fa-check"></i><b>4.1</b> Probability Density Function (pdf)</a></li>
+<li class="chapter" data-level="4.2" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#cumulative-distribution-functions"><i class="fa fa-check"></i><b>4.2</b> Cumulative Distribution Functions</a></li>
+<li class="chapter" data-level="4.3" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#expected-values"><i class="fa fa-check"></i><b>4.3</b> Expected Values</a></li>
+<li class="chapter" data-level="4.4" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#normal-distribution"><i class="fa fa-check"></i><b>4.4</b> Normal Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#the-exponential-and-uniform-random-variables"><i class="fa fa-check"></i><b>4.5</b> The Exponential and Uniform Random Variables</a></li>
+<li class="chapter" data-level="4.6" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#continuous-uniformab-random-variable"><i class="fa fa-check"></i><b>4.6</b> (Continuous) Uniform[a,b] Random Variable</a></li>
+<li class="chapter" data-level="4.7" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#r-companion-for-chapter-4"><i class="fa fa-check"></i><b>4.7</b> R Companion for Chapter 4</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html"><i class="fa fa-check"></i><b>5</b> Multivariate Random Variables</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#joint-probability-distributions"><i class="fa fa-check"></i><b>5.1</b> Joint Probability Distributions</a></li>
+<li class="chapter" data-level="5.2" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#marginal-probability-functions"><i class="fa fa-check"></i><b>5.2</b> Marginal Probability Functions</a></li>
+<li class="chapter" data-level="5.3" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#independent-random-variables"><i class="fa fa-check"></i><b>5.3</b> Independent Random Variables</a></li>
+<li class="chapter" data-level="5.4" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#conditional-distributions"><i class="fa fa-check"></i><b>5.4</b> Conditional Distributions</a></li>
+<li class="chapter" data-level="5.5" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#expected-values-covariance-and-correlation"><i class="fa fa-check"></i><b>5.5</b> Expected Values, Covariance, and Correlation</a></li>
+<li class="chapter" data-level="5.6" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#bivariate-normal-distribution"><i class="fa fa-check"></i><b>5.6</b> Bivariate Normal Distribution</a></li>
+<li class="chapter" data-level="5.7" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#r-companion-for-chapter-5"><i class="fa fa-check"></i><b>5.7</b> R Companion for Chapter 5</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html"><i class="fa fa-check"></i><b>6</b> Sampling Distributions, Central Limit Theorem, and Estimation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#statistics-and-their-distributions"><i class="fa fa-check"></i><b>6.1</b> Statistics and Their Distributions</a></li>
+<li class="chapter" data-level="6.2" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#the-distribution-of-the-sample-mean"><i class="fa fa-check"></i><b>6.2</b> The Distribution of the Sample Mean</a></li>
+<li class="chapter" data-level="6.3" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#several-general-concepts-of-point-estimation"><i class="fa fa-check"></i><b>6.3</b> Several General Concepts of Point Estimation</a></li>
+<li class="chapter" data-level="6.4" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#methods-of-point-estimation"><i class="fa fa-check"></i><b>6.4</b> Methods of Point Estimation</a></li>
+<li class="chapter" data-level="6.5" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#r-companion-for-chapter-6"><i class="fa fa-check"></i><b>6.5</b> R Companion for Chapter 6</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html"><i class="fa fa-check"></i><b>7</b> Confidence Intervals for One Population Parameter</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#basic-concepts-of-confidence-intervals"><i class="fa fa-check"></i><b>7.1</b> Basic Concepts of Confidence Intervals</a></li>
+<li class="chapter" data-level="7.2" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#large-sample-confidence-intervals-for-a-population-mean-and-proportion"><i class="fa fa-check"></i><b>7.2</b> Large-Sample Confidence Intervals for a Population Mean and Proportion</a></li>
+<li class="chapter" data-level="7.3" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#intervals-based-on-a-normal-population-distribution"><i class="fa fa-check"></i><b>7.3</b> Intervals Based on a Normal Population Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html"><i class="fa fa-check"></i><b>8</b> Hypothesis Tests for One Population Parameter</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#basic-concepts-of-hypothesis-testing"><i class="fa fa-check"></i><b>8.1</b> Basic Concepts of Hypothesis Testing</a></li>
+<li class="chapter" data-level="8.2" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#tests-about-a-population-mean-mu"><i class="fa fa-check"></i><b>8.2</b> Tests About a Population Mean, <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="8.3" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#tests-concerning-a-population-proportion-p"><i class="fa fa-check"></i><b>8.3</b> Tests Concerning a Population Proportion, <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="8.4" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#r-companion-for-chapter-8"><i class="fa fa-check"></i><b>8.4</b> R Companion for Chapter 8</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html"><i class="fa fa-check"></i><b>9</b> Inference Based On Two Samples</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#z-tests-and-confidence-intervals-for-a-difference-between-two-population-parameters"><i class="fa fa-check"></i><b>9.1</b> z-tests and Confidence Intervals for a Difference Between Two Population Parameters</a></li>
+<li class="chapter" data-level="9.2" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#the-two-sample-t-test-and-confidence-interval"><i class="fa fa-check"></i><b>9.2</b> The Two-Sample t-test and Confidence Interval</a></li>
+<li class="chapter" data-level="9.3" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#analysis-of-paired-data"><i class="fa fa-check"></i><b>9.3</b> Analysis of Paired Data</a></li>
+<li class="chapter" data-level="9.4" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#inferences-concerning-a-difference-between-population-proportions"><i class="fa fa-check"></i><b>9.4</b> Inferences Concerning a Difference Between Population Proportions</a></li>
+<li class="chapter" data-level="9.5" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#statistical-power"><i class="fa fa-check"></i><b>9.5</b> Statistical Power</a></li>
+<li class="chapter" data-level="9.6" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#r-companion-for-chapter-9"><i class="fa fa-check"></i><b>9.6</b> R Companion for Chapter 9</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html"><i class="fa fa-check"></i><b>10</b> Analysis of Variance (ANOVA)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#single-factor-anova"><i class="fa fa-check"></i><b>10.1</b> Single-Factor ANOVA</a></li>
+<li class="chapter" data-level="10.2" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#multiple-comparison-in-anova"><i class="fa fa-check"></i><b>10.2</b> Multiple Comparison in ANOVA</a></li>
+<li class="chapter" data-level="10.3" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#r-companion-for-chapter-10"><i class="fa fa-check"></i><b>10.3</b> R Companion for Chapter 10</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>11</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-simple-linear-regression-model"><i class="fa fa-check"></i><b>11.1</b> The Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="11.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#correlation"><i class="fa fa-check"></i><b>11.2</b> Correlation</a></li>
+<li class="chapter" data-level="11.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimating-model-parameters"><i class="fa fa-check"></i><b>11.3</b> Estimating Model Parameters</a></li>
+<li class="chapter" data-level="11.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#assessing-model-fit-and-inferences-for-the-slope-parameter-beta_1"><i class="fa fa-check"></i><b>11.4</b> Assessing Model Fit and Inferences for the Slope Parameter, <span class="math inline">\(\beta_1\)</span></a></li>
+<li class="chapter" data-level="11.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-prediction-of-future-y-values"><i class="fa fa-check"></i><b>11.5</b> The Prediction of Future Y Values</a></li>
+<li class="chapter" data-level="11.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-diagnostics"><i class="fa fa-check"></i><b>11.6</b> Model Diagnostics</a></li>
+<li class="chapter" data-level="11.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#extrapolation"><i class="fa fa-check"></i><b>11.7</b> Extrapolation</a></li>
+<li class="chapter" data-level="11.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#r-companion-for-chapter-11"><i class="fa fa-check"></i><b>11.8</b> R Companion for Chapter 11</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>12</b> Multiple Regression</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="multiple-regression.html"><a href="multiple-regression.html#multiple-regression-model"><i class="fa fa-check"></i><b>12.1</b> Multiple Regression Model</a></li>
+<li class="chapter" data-level="12.2" data-path="multiple-regression.html"><a href="multiple-regression.html#variable-transformations"><i class="fa fa-check"></i><b>12.2</b> Variable Transformations</a></li>
+<li class="chapter" data-level="12.3" data-path="multiple-regression.html"><a href="multiple-regression.html#categorical-variables-interaction-and-polynomial-regression"><i class="fa fa-check"></i><b>12.3</b> Categorical Variables, Interaction, and Polynomial Regression</a></li>
+<li class="chapter" data-level="12.4" data-path="multiple-regression.html"><a href="multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>12.4</b> Polynomial regression</a></li>
+<li class="chapter" data-level="12.5" data-path="multiple-regression.html"><a href="multiple-regression.html#model-and-variable-selection"><i class="fa fa-check"></i><b>12.5</b> Model and Variable Selection</a></li>
+<li class="chapter" data-level="12.6" data-path="multiple-regression.html"><a href="multiple-regression.html#other-considerations"><i class="fa fa-check"></i><b>12.6</b> Other Considerations</a></li>
+<li class="chapter" data-level="12.7" data-path="multiple-regression.html"><a href="multiple-regression.html#r-companion-for-chapter-12"><i class="fa fa-check"></i><b>12.7</b> R Companion for Chapter 12</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">STAT 315 Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="multiple-regression" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">Chapter 12</span> Multiple Regression<a href="multiple-regression.html#multiple-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In Chapter 11, we explored simple linear regression to predict a quantitative variable, <span class="math inline">\(y\)</span>, using a single predictor, <span class="math inline">\(x\)</span>. Multiple regression expands this approach by incorporating two or more predictor variables, enabling more comprehensive models. This chapter introduces techniques like variable transformations to improve linearity, interaction terms to capture relationships between predictors, and polynomial regression for modeling curved trends. We also explore model selection strategies to identify the most effective combination of predictors for accurate, reliable predictions.</p>
+<div id="multiple-regression-model" class="section level2 hasAnchor" number="12.1">
+<h2><span class="header-section-number">12.1</span> Multiple Regression Model<a href="multiple-regression.html#multiple-regression-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Multiple regression (MR) extends simple linear regression by allowing for multiple predictor variables to model a single response variable.</p>
+<p><strong>Population Models for SLR and MR:</strong></p>
+<p><strong>SLR:</strong> <span class="math inline">\(y = \beta_0 + \beta_1 x_1 + \epsilon\)</span></p>
+<p><strong>MR:</strong> <span class="math inline">\(y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \ldots + \beta_p x_p + \epsilon\)</span></p>
+<p><strong>Estimated Regression Equations for SLR and MR:</strong></p>
+<p><strong>SLR:</strong> <span class="math inline">\(\hat{y} = b_0 + b_1 x_1\)</span></p>
+<p><strong>MR:</strong> <span class="math inline">\(\hat{y} = b_0 + b_1 x_1 + b_2 x_2 + \ldots + b_p x_p\)</span></p>
+<div style="page-break-after: always;"></div>
+<p><strong>Assumptions for Multiple Regression</strong></p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Errors (Independence and Normality)</strong>: The errors (<span class="math inline">\(\epsilon_i\)</span>) should be independent and identically distributed normal random variables with a mean of 0 and a constant variance (<span class="math inline">\(\sigma^2\)</span>). This assumption ensures that the residuals are not systematically related to each other, which can lead to biased estimates.</p></li>
+<li><p><strong>Linearity</strong>: The mean of the response variable is assumed to be a linear combination of the predictor variables. This means the relationship between the predictors and the response should be approximately linear. Residual plots can help identify whether this assumption holds.</p></li>
+<li><p><strong>Homoscedasticity (Constant Variance of Errors)</strong>: The errors should have constant variance across all levels of the predictor variables. If the variance of the residuals increases or decreases with the value of the predictors (i.e., heteroscedasticity), it indicates potential issues. A residual plot can help detect heteroscedasticity—look for a “fanning out” or “fanning in” pattern, which suggests non-constant variance.</p></li>
+</ol>
+<p><strong>Note</strong>: While estimated regression coefficients can be calculated using matrix methods from linear algebra, we will focus on using R for these calculations.</p>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-281" class="example"><strong>Example 12.1  </strong></span>The “trees” dataset in R provides measurements of the girth, height, and volume of 31 timber in 31 felled black cherry trees. We can fit a basic linear regression model with height and girth as predictor variables in R as follows.</p>
+</div>
+<p><img src="_main_files/figure-html/unnamed-chunk-166-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="multiple-regression.html#cb203-1" tabindex="-1"></a><span class="fu">data</span>(trees)</span>
+<span id="cb203-2"><a href="multiple-regression.html#cb203-2" tabindex="-1"></a>mod <span class="ot">=</span> <span class="fu">lm</span>(Volume<span class="sc">~</span>Height<span class="sc">+</span>Girth,<span class="at">data=</span>trees)</span>
+<span id="cb203-3"><a href="multiple-regression.html#cb203-3" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Volume ~ Height + Girth, data = trees)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.4065 -2.6493 -0.2876  2.2003  8.4847 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -57.9877     8.6382  -6.713 2.75e-07 ***
+## Height        0.3393     0.1302   2.607   0.0145 *  
+## Girth         4.7082     0.2643  17.816  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.882 on 28 degrees of freedom
+## Multiple R-squared:  0.948,  Adjusted R-squared:  0.9442 
+## F-statistic:   255 on 2 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div style="page-break-after: always;"></div>
+<p><strong>F-test for Overall Model (Model Utility Test)</strong></p>
+<p>We want to test if any of our predictor variables (<span class="math inline">\(x_i&#39;s\)</span>) are linearly related to the response variable (y).</p>
+<p>If we have <span class="math inline">\(p\)</span> predictor variables, then our hypotheses will be:</p>
+<p><span class="math inline">\(\boxed{F_{test} = \frac{MSR}{MSE}, df_1 = p, df_2 = n-p-1}\)</span></p>
+<p>This will only tell us if any of our predictors are linearly related to the response, not which ones.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-282" class="example"><strong>Example 12.2  </strong></span>Using the output from the previous page, complete an F-test for overall model for the cherry trees dataset.</p>
+</div>
+<div style="page-break-after: always;"></div>
+<p><strong>t-test for Individual Predictors</strong></p>
+<p>If we reject <span class="math inline">\(H_o\)</span> in our F-test, then we conclude that one or more of our predictor variables is linearly related to our response variable.</p>
+<p>We can complete t-tests for each predictor to determine which are useful/significant. For example, we can test an individual predictor with the following hypothesis test:</p>
+<p><span class="math inline">\(\boxed{t_{test} = \frac{b_i}{s_{b_i}}, df = n-p-1}\)</span></p>
+<p><strong>Rule of Thumb:</strong> If <span class="math inline">\(\beta_i\)</span> is not significantly different from zero (p-value <span class="math inline">\(\geq \alpha\)</span>), consider dropping that predictor from the model. However, evaluate practical significance and model context before removing variables entirely.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-283" class="example"><strong>Example 12.3  </strong></span>Using the output from the previous page, complete t-tests for individual predictors (height and diameter).</p>
+</div>
+<p><strong>Interpreting the model estimates (<span class="math inline">\(b_i\)</span>)</strong></p>
+<div class="example">
+<p><span id="exm:unlabeled-div-284" class="example"><strong>Example 12.4  </strong></span>Interpret <span class="math inline">\(b_2\)</span> from the cherry trees example in the context of the problem.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="variable-transformations" class="section level2 hasAnchor" number="12.2">
+<h2><span class="header-section-number">12.2</span> Variable Transformations<a href="multiple-regression.html#variable-transformations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sometimes a nonlinear regression function is appropriate which may require us to transform the data. An example of such a nonlinearity is given below.</p>
+<p><strong>Transforming Response Variable</strong></p>
+<div class="example">
+<p><span id="exm:unlabeled-div-285" class="example"><strong>Example 12.5  </strong></span>A colony of bacteria is exposed to X-rays and the number of surviving bacteria, <span class="math inline">\(n\)</span>, at time <span class="math inline">\(t\)</span> are recorded. Let’s examine the data, the SLR line of best fit, and a residual plot.</p>
+</div>
+<table style="width:100%;">
+<colgroup>
+<col width="7%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(t\)</span></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(n_t\)</span></td>
+<td>355</td>
+<td>211</td>
+<td>197</td>
+<td>166</td>
+<td>142</td>
+<td>166</td>
+<td>104</td>
+<td>60</td>
+<td>56</td>
+<td>38</td>
+<td>36</td>
+<td>32</td>
+<td>21</td>
+<td>19</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<p><img src="_main_files/figure-html/unnamed-chunk-168-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<p>By inspection, the line of best fit does not seem appropriate. Additionally, the residual plot suggests that the data has a nonlinearity.</p>
+<div style="page-break-after: always;"></div>
+<p>Instead, we could consider the following model: <span class="math inline">\(n_t = n_0 \cdot e^{\beta t}\)</span>.</p>
+<p>If we take the natural log of each side of this model, we get: <span class="math inline">\(ln(n_t) = ln(n_0) + ln(e^{\beta t}) = \alpha + \beta t\)</span>.</p>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(t\)</span></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(ln(n_t)\)</span></td>
+<td>5.87</td>
+<td>5.35</td>
+<td>5.28</td>
+<td>5.11</td>
+<td>4.96</td>
+<td>5.11</td>
+<td>4.64</td>
+<td>4.09</td>
+<td>4.03</td>
+<td>3.64</td>
+<td>3.58</td>
+<td>3.47</td>
+<td>3.04</td>
+<td>2.94</td>
+<td>2.71</td>
+</tr>
+</tbody>
+</table>
+<p>After making this transformation, we can refit the regression model with a much more appropriate model.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-169-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+<p>A regression model is considered <strong>intrinsically linear</strong> if, through a transformation on <span class="math inline">\(Y\)</span> or <span class="math inline">\(X_i\)</span>, it can be expressed as a linear regression model of the form <span class="math inline">\(y&#39; = \beta_0 + \beta_1 x&#39; + \epsilon&#39;\)</span>.</p>
+<p><strong>Examples:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(y = \alpha e^{\beta x} \cdot \epsilon\)</span> transforms to <span class="math inline">\(\ln(y) = y&#39; = \beta_0 + \beta_1 x&#39; + \epsilon&#39;\)</span>, where <span class="math inline">\(x&#39; = x\)</span>, <span class="math inline">\(\beta_0 = \ln(\alpha)\)</span>, <span class="math inline">\(\beta_1 = \beta\)</span>, and <span class="math inline">\(\epsilon&#39; = \ln(\epsilon)\)</span>.</p></li>
+<li><p><span class="math inline">\(y = \alpha x^\beta \cdot \epsilon\)</span> transforms to <span class="math inline">\(\log(y) = y&#39; = \beta_0 + \beta_1 x&#39; + \epsilon&#39;\)</span>, where <span class="math inline">\(x&#39; = \log(x)\)</span>, <span class="math inline">\(\beta_0 = \log(\alpha)\)</span>, <span class="math inline">\(\beta_1 = \beta\)</span>, and <span class="math inline">\(\epsilon&#39; = \log(\epsilon)\)</span>.</p></li>
+</ol>
+<p><strong>Box-Cox Transformation</strong></p>
+<p>If the linearity or constant variance assumptions are violated, consider using a <strong>Box-Cox transformation</strong> to find an appropriate transformation for the response variable. This method can help determine the best power transformation to improve the model fit, making it more linear and stabilizing variance. The <code>boxcox()</code> function in R can be used to explore possible transformations.</p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="multiple-regression.html#cb205-1" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb205-2"><a href="multiple-regression.html#cb205-2" tabindex="-1"></a><span class="fu">boxcox</span>(n<span class="sc">~</span>t)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-170-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+<p><strong>Transforming Predictor Variables</strong></p>
+<p>We can also transform our predictor variables, <span class="math inline">\(X_i\)</span>, if a nonlinear model is appropriate. Consider the following example with a quadratic relationship.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-286" class="example"><strong>Example 12.6  </strong></span>From Newtonian Physics, acceleration of an object in free fall drops a distance that is proportional to the square of the elapsed time. Consider the following dataset in which an object’s dropped distance as a function of time and some measurement error is present.</p>
+</div>
+<table style="width:100%;">
+<colgroup>
+<col width="9%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="7%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(t\)</span></th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(d_t\)</span></td>
+<td>0</td>
+<td>8.7</td>
+<td>20.6</td>
+<td>37.1</td>
+<td>82.2</td>
+<td>120.9</td>
+<td>177.5</td>
+<td>244.2</td>
+<td>310.1</td>
+<td>399.0</td>
+<td>480.6</td>
+</tr>
+</tbody>
+</table>
+<p>First, we will fit the model <span class="math inline">\(d = b_0 + b_1 t\)</span> and then compare this model with a quadratic model, <span class="math inline">\(d = b_0 + b_1 t^2\)</span>.</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="multiple-regression.html#cb206-1" tabindex="-1"></a>t <span class="ot">=</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb206-2"><a href="multiple-regression.html#cb206-2" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">8.7</span>,<span class="fl">20.6</span>,<span class="fl">37.1</span>,<span class="fl">82.2</span>,<span class="fl">120.9</span>,<span class="fl">177.5</span>,<span class="fl">244.2</span>,<span class="fl">310.1</span>,<span class="fl">399.0</span>,<span class="fl">480.6</span>)</span>
+<span id="cb206-3"><a href="multiple-regression.html#cb206-3" tabindex="-1"></a>lm1 <span class="ot">=</span> <span class="fu">lm</span>(d<span class="sc">~</span>t)</span>
+<span id="cb206-4"><a href="multiple-regression.html#cb206-4" tabindex="-1"></a>lm2 <span class="ot">=</span> <span class="fu">lm</span>(d<span class="sc">~</span><span class="fu">I</span>(t<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-172-1.png" width="672" height="20%" style="display: block; margin: auto;" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-173-1.png" width="672" height="20%" style="display: block; margin: auto;" /></p>
+<p>By inspection, the quadratic model seems more appropriate in terms of the line of best fit and in terms of the residuals.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="categorical-variables-interaction-and-polynomial-regression" class="section level2 hasAnchor" number="12.3">
+<h2><span class="header-section-number">12.3</span> Categorical Variables, Interaction, and Polynomial Regression<a href="multiple-regression.html#categorical-variables-interaction-and-polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Categorical Variables</strong></p>
+<p>Categorical variables can be easily incorporated in a regression model. In fact, ANOVA from chapter 10 can be thought of as a regression on a categorical variable.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-287" class="example"><strong>Example 12.7  </strong></span>The following dataset in R was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models).</p>
+</div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="multiple-regression.html#cb207-1" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb207-2"><a href="multiple-regression.html#cb207-2" tabindex="-1"></a><span class="fu">head</span>(mtcars,<span class="at">n=</span><span class="dv">4</span>)</span></code></pre></div>
+<pre><code>##                 mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4      21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag  21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710     22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</code></pre>
+<p>To include a categorical variable in a regression model, you need to designate it as a “factor” variable in R. Let’s fit a multiple regression model with miles per gallon as the response variable, weight as a continuous predictor, and the number of cylinders (4, 6, or 8) as a categorical predictor.</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="multiple-regression.html#cb209-1" tabindex="-1"></a>mt.lm <span class="ot">=</span> <span class="fu">lm</span>(mpg<span class="sc">~</span>wt<span class="sc">+</span><span class="fu">factor</span>(cyl),<span class="at">data=</span>mtcars)</span>
+<span id="cb209-2"><a href="multiple-regression.html#cb209-2" tabindex="-1"></a><span class="fu">summary</span>(mt.lm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt + factor(cyl), data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.5890 -1.2357 -0.5159  1.3845  5.7915 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   33.9908     1.8878  18.006  &lt; 2e-16 ***
+## wt            -3.2056     0.7539  -4.252 0.000213 ***
+## factor(cyl)6  -4.2556     1.3861  -3.070 0.004718 ** 
+## factor(cyl)8  -6.0709     1.6523  -3.674 0.000999 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.557 on 28 degrees of freedom
+## Multiple R-squared:  0.8374, Adjusted R-squared:   0.82 
+## F-statistic: 48.08 on 3 and 28 DF,  p-value: 3.594e-11</code></pre>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-288" class="example"><strong>Example 12.8  </strong></span>For the Motor Trends car example, answer the following questions.</p>
+</div>
+<ol style="list-style-type: lower-alpha">
+<li>Write the estimated multiple regression equation.</li>
+</ol>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>What is the estimated MPG for a car that weighs 2.900 (thousands of pounds) and has 4 cylinders.</li>
+</ol>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>What is the estimated difference in MPG between an 8-cylinder car and a 6-cylinder car?</li>
+</ol>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Interpret the estimated regression coefficients in the context of the problem.</li>
+</ol>
+<div style="page-break-after: always;"></div>
+<p><strong>Interaction</strong></p>
+<p>If the effect of one predictor variable on the response variable depends on other predictor variables, we may want to include an <strong>interaction variable</strong>.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-289" class="example"><strong>Example 12.9  </strong></span>Let’s fit the following model: <span class="math inline">\(MPG = b_0 + b_1 \cdot Weight + b_2 \cdot I(am) + b_3 \cdot Weight \cdot I(am)\)</span>, where the ``am’’ variable is 0 for an automatic transmission and 1 is for a manual transmission.</p>
+</div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="multiple-regression.html#cb211-1" tabindex="-1"></a>lm.int <span class="ot">=</span> <span class="fu">lm</span>(mpg<span class="sc">~</span>wt<span class="sc">*</span><span class="fu">factor</span>(am),<span class="at">data=</span>mtcars)</span>
+<span id="cb211-2"><a href="multiple-regression.html#cb211-2" tabindex="-1"></a><span class="fu">summary</span>(lm.int)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt * factor(am), data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.6004 -1.5446 -0.5325  0.9012  6.0909 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     31.4161     3.0201  10.402 4.00e-11 ***
+## wt              -3.7859     0.7856  -4.819 4.55e-05 ***
+## factor(am)1     14.8784     4.2640   3.489  0.00162 ** 
+## wt:factor(am)1  -5.2984     1.4447  -3.667  0.00102 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.591 on 28 degrees of freedom
+## Multiple R-squared:  0.833,  Adjusted R-squared:  0.8151 
+## F-statistic: 46.57 on 3 and 28 DF,  p-value: 5.209e-11</code></pre>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="polynomial-regression" class="section level2 hasAnchor" number="12.4">
+<h2><span class="header-section-number">12.4</span> Polynomial regression<a href="multiple-regression.html#polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There is flexibility in a regression model to fit an arbitrary polynomial to the data, however, we must take care to not “overfit” the data.</p>
+<p>The <strong>hierarchical principle</strong> in polynomial regression states that if a model includes a higher-order term (e.g., <span class="math inline">\(x^2\)</span>), it should also include all lower-order terms (e.g., <span class="math inline">\(x\)</span>), even if their coefficients are not statistically significant. This ensures the model is mathematically valid and interpretable, as excluding lower-order terms can distort the relationship between the predictor and the response. However, in certain cases, lower-order terms may be omitted if there is a domain-specific justification, such as theoretical knowledge or practical constraints that support the exclusion.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-290" class="example"><strong>Example 12.10  </strong></span>Let’s generate a toy dataset based a cubic polynomial and see how successfully we can recover the original function.</p>
+</div>
+<pre><code>##              x         y
+## [1,] -9.976245 -599.8586
+## [2,] -9.957027 -588.7105
+## [3,] -9.948346 -599.9990
+## [4,] -9.779192 -560.4769
+## [5,] -8.859972 -427.0615
+## [6,] -8.652312 -399.5171</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-178-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x + I(x^2) + I(x^3))
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -26.9139  -8.4193   0.2316   6.0311  31.3370 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -1.582774   1.716694  -0.922    0.359    
+## x            0.002634   0.516494   0.005    0.996    
+## I(x^2)      -1.013334   0.039545 -25.625   &lt;2e-16 ***
+## I(x^3)       0.497069   0.007792  63.792   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 11.92 on 96 degrees of freedom
+## Multiple R-squared:  0.9961, Adjusted R-squared:  0.996 
+## F-statistic:  8212 on 3 and 96 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-179-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="model-and-variable-selection" class="section level2 hasAnchor" number="12.5">
+<h2><span class="header-section-number">12.5</span> Model and Variable Selection<a href="multiple-regression.html#model-and-variable-selection" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here are some considerations when completing model and variable selection.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Statistical Significance</strong> — Consider removing predictors with high p-values, as they may not contribute significantly to explaining the variation in the response variable. However, be cautious of multicollinearity, as it can impact p-values.</p></li>
+<li><p><strong>Theoretical and Domain Knowledge</strong> — Use knowledge of the field to guide variable selection. Some variables may be essential based on theory, even if their statistical contribution appears marginal.</p></li>
+<li><p><strong>Practical Significance</strong> — Beyond statistical tests, evaluate each variable’s real-world relevance. Retain variables that are meaningful in the context of the problem, even if their statistical significance is lower.</p></li>
+<li><p><strong>Multicollinearity</strong> — Check for high correlations among predictors, as multicollinearity can inflate standard errors and obscure true relationships. Removing or combining correlated variables can improve model stability.</p></li>
+<li><p><strong>Model Parsimony</strong> — Aim for simplicity by retaining only essential variables, as simpler models are often more interpretable and less prone to overfitting. Use metrics like Adjusted <span class="math inline">\(R^2\)</span>, AIC, or BIC to balance fit with model complexity.</p></li>
+</ol>
+<div class="example">
+<p><span id="exm:unlabeled-div-291" class="example"><strong>Example 12.11  </strong></span>Returning to the cherry trees example, let’s consider the following regression models for predicting tree volume:</p>
+<p><strong>Model 1:</strong> <span class="math inline">\(\widehat{\text{volume}} = b_0 + b_1 \cdot \text{Height} + b_2 \cdot \text{Diameter}\)</span></p>
+<p><strong>Model 2:</strong> <span class="math inline">\(\widehat{\text{volume}} = b_0 + b_1 \cdot \text{Height} + b_2 \cdot \text{Diameter}^2\)</span></p>
+<p><strong>Model 3:</strong> <span class="math inline">\(\widehat{\text{volume}} = b_0 + b_1 \cdot \text{Height} \cdot \text{Diameter}^2\)</span></p>
+<p><strong>Model 4:</strong> <span class="math inline">\(\widehat{\text{volume}} = b_1 \cdot \text{Height} \cdot \text{Diameter}^2\)</span></p>
+<p>Which model is preferred?</p>
+</div>
+<p>Model 4 aligns well with our understanding that volume is proportional to <span class="math inline">\(\text{Height} \times \text{Diameter}^2\)</span>. But how could we determine the best model if we didn’t already know this relationship? This is where model selection techniques come in, allowing us to evaluate and compare models based on the data alone, without prior knowledge of the underlying formula.</p>
+<div style="page-break-after: always;"></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="multiple-regression.html#cb215-1" tabindex="-1"></a>lm1 <span class="ot">=</span> <span class="fu">lm</span>(Volume<span class="sc">~</span>Height<span class="sc">+</span>Girth,<span class="at">data=</span>trees)</span>
+<span id="cb215-2"><a href="multiple-regression.html#cb215-2" tabindex="-1"></a><span class="fu">summary</span>(lm1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Volume ~ Height + Girth, data = trees)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.4065 -2.6493 -0.2876  2.2003  8.4847 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -57.9877     8.6382  -6.713 2.75e-07 ***
+## Height        0.3393     0.1302   2.607   0.0145 *  
+## Girth         4.7082     0.2643  17.816  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.882 on 28 degrees of freedom
+## Multiple R-squared:  0.948,  Adjusted R-squared:  0.9442 
+## F-statistic:   255 on 2 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="multiple-regression.html#cb217-1" tabindex="-1"></a>lm2 <span class="ot">=</span> <span class="fu">lm</span>(Volume<span class="sc">~</span>Height<span class="sc">+</span><span class="fu">I</span>(Girth<span class="sc">^</span><span class="dv">2</span>),<span class="at">data=</span>trees)</span>
+<span id="cb217-2"><a href="multiple-regression.html#cb217-2" tabindex="-1"></a><span class="fu">summary</span>(lm2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Volume ~ Height + I(Girth^2), data = trees)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.8844 -2.2105  0.1196  2.6134  4.2404 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -27.511603   6.557697  -4.195 0.000248 ***
+## Height        0.348809   0.093152   3.744 0.000830 ***
+## I(Girth^2)    0.168458   0.006679  25.222  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.799 on 28 degrees of freedom
+## Multiple R-squared:  0.9729, Adjusted R-squared:  0.971 
+## F-statistic: 503.2 on 2 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div style="page-break-after: always;"></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="multiple-regression.html#cb219-1" tabindex="-1"></a>lm3 <span class="ot">=</span> <span class="fu">lm</span>(Volume<span class="sc">~</span>Height<span class="sc">:</span><span class="fu">I</span>(Girth<span class="sc">^</span><span class="dv">2</span>),<span class="at">data=</span>trees)</span>
+<span id="cb219-2"><a href="multiple-regression.html#cb219-2" tabindex="-1"></a><span class="fu">summary</span>(lm3)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Volume ~ Height:I(Girth^2), data = trees)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.6195 -1.1002 -0.1656  1.7451  4.1976 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       -2.977e-01  9.636e-01  -0.309     0.76    
+## Height:I(Girth^2)  2.124e-03  5.949e-05  35.711   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.493 on 29 degrees of freedom
+## Multiple R-squared:  0.9778, Adjusted R-squared:  0.977 
+## F-statistic:  1275 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="multiple-regression.html#cb221-1" tabindex="-1"></a>lm4 <span class="ot">=</span> <span class="fu">lm</span>(Volume<span class="sc">~</span>Height<span class="sc">:</span><span class="fu">I</span>(Girth<span class="sc">^</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>,<span class="at">data=</span>trees)</span>
+<span id="cb221-2"><a href="multiple-regression.html#cb221-2" tabindex="-1"></a><span class="fu">summary</span>(lm4)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Volume ~ Height:I(Girth^2) - 1, data = trees)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.6696 -1.0832 -0.3341  1.6045  4.2944 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## Height:I(Girth^2) 2.108e-03  2.722e-05   77.44   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.455 on 30 degrees of freedom
+## Multiple R-squared:  0.995,  Adjusted R-squared:  0.9949 
+## F-statistic:  5996 on 1 and 30 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div style="page-break-after: always;"></div>
+<p><strong>Model Residuals</strong></p>
+<p>How can model residuals help us pick the appropriate model?</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-184-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="other-considerations" class="section level2 hasAnchor" number="12.6">
+<h2><span class="header-section-number">12.6</span> Other Considerations<a href="multiple-regression.html#other-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>1. Multicollinearity</strong> — When two or more predictor variables are highly correlated, it can lead to large standard errors, making it difficult to assess the individual significance of each predictor. This may result in predictors appearing insignificant, even if they are relevant to the model.</p>
+<p><strong>2. Dependent Errors</strong> — If the errors (residuals) are correlated, the model may be inadequate, as this violates the assumption of independence in regression. In such cases, a <strong>time series model</strong> may be more appropriate. For example, stock prices often exhibit high autocorrelation (i.e., errors are highly correlated), which indicates the need for specialized models designed to account for time-based dependencies.</p>
+<p><strong>3. Confounding Variables</strong> — Excluding important variables from a model can lead to incorrect inferences, as confounding variables may influence both the predictor and response variables. For instance, in the example of shark attacks and ice cream sales, there appeared to be a strong relationship between the two. However, the true underlying factor was the temperature: warmer days increase both swimming (leading to more shark interactions) and ice cream sales. Failing to account for such confounding variables can lead to misleading conclusions.</p>
+<p><strong>4. Outliers and Influential Points</strong> — Outliers or points with high leverage can disproportionately impact the model, skewing results or making the model appear significant when it isn’t. Identifying and investigating outliers can help determine whether to keep them, transform the data, or adjust the model.</p>
+<p><strong>5. Overfitting</strong> — Adding too many predictors can lead to overfitting, where the model performs well on the sample data but poorly on new data. Techniques like cross-validation, adjusted <span class="math inline">\(R^2\)</span>, and criteria such as AIC or BIC can help assess the model’s generalizability and prevent overfitting.</p>
+<p><strong>6. Data Scaling and Centering</strong> — Predictor variables on vastly different scales can lead to numerical instability and difficulty interpreting coefficients, especially with interaction terms. Scaling or centering predictors can help stabilize the model and improve interpretability.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="r-companion-for-chapter-12" class="section level2 hasAnchor" number="12.7">
+<h2><span class="header-section-number">12.7</span> R Companion for Chapter 12<a href="multiple-regression.html#r-companion-for-chapter-12" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="example">
+<p><span id="exm:unlabeled-div-292" class="example"><strong>Example 12.12  </strong></span>The dataset is provide in the base version of R and is a macroeconomic data set which provides a well-known example for a highly collinear regression. This dataset includes 7 economical variables, observed yearly from 1947 to 1962 (n=16). For more information on the variables, enter into R.</p>
+</div>
+<p>Let’s begin by looking at the header of the dataset and calculating the correlation matrix.</p>
+<p>&lt;&lt;setup2, include=FALSE, cache=FALSE, tidy=TRUE&gt;&gt;=
+options(tidy=TRUE, width=90)
+@</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="multiple-regression.html#cb223-1" tabindex="-1"></a><span class="fu">data</span>(longley)</span>
+<span id="cb223-2"><a href="multiple-regression.html#cb223-2" tabindex="-1"></a></span>
+<span id="cb223-3"><a href="multiple-regression.html#cb223-3" tabindex="-1"></a><span class="co"># show first few observations</span></span>
+<span id="cb223-4"><a href="multiple-regression.html#cb223-4" tabindex="-1"></a><span class="fu">head</span>(longley)</span></code></pre></div>
+<pre><code>##      GNP.deflator     GNP Unemployed Armed.Forces Population Year Employed
+## 1947         83.0 234.289      235.6        159.0    107.608 1947   60.323
+## 1948         88.5 259.426      232.5        145.6    108.632 1948   61.122
+## 1949         88.2 258.054      368.2        161.6    109.773 1949   60.171
+## 1950         89.5 284.599      335.1        165.0    110.929 1950   61.187
+## 1951         96.2 328.975      209.9        309.9    112.075 1951   63.221
+## 1952         98.1 346.999      193.2        359.4    113.270 1952   63.639</code></pre>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="multiple-regression.html#cb225-1" tabindex="-1"></a><span class="co"># round the correlations to two decimal places for better viewing</span></span>
+<span id="cb225-2"><a href="multiple-regression.html#cb225-2" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(longley),<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##              GNP.deflator  GNP Unemployed Armed.Forces Population Year Employed
+## GNP.deflator         1.00 0.99       0.62         0.46       0.98 0.99     0.97
+## GNP                  0.99 1.00       0.60         0.45       0.99 1.00     0.98
+## Unemployed           0.62 0.60       1.00        -0.18       0.69 0.67     0.50
+## Armed.Forces         0.46 0.45      -0.18         1.00       0.36 0.42     0.46
+## Population           0.98 0.99       0.69         0.36       1.00 0.99     0.96
+## Year                 0.99 1.00       0.67         0.42       0.99 1.00     0.97
+## Employed             0.97 0.98       0.50         0.46       0.96 0.97     1.00</code></pre>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="multiple-regression.html#cb227-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">tidy=</span><span class="cn">TRUE</span>, <span class="at">width=</span><span class="dv">70</span>)</span></code></pre></div>
+<div style="page-break-after: always;"></div>
+<p>For this example, we will use (number of people employed) as the response variable and the other six variables as predictor variables.<br />
+</p>
+<p>Let’s begin by using all six predictor variables and fitting the multiple regression model.</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="multiple-regression.html#cb228-1" tabindex="-1"></a>model1 <span class="ot">=</span> <span class="fu">lm</span>(Employed<span class="sc">~</span>GNP.deflator<span class="sc">+</span>GNP<span class="sc">+</span>Unemployed<span class="sc">+</span>Armed.Forces<span class="sc">+</span>Population<span class="sc">+</span>Year,</span>
+<span id="cb228-2"><a href="multiple-regression.html#cb228-2" tabindex="-1"></a>           <span class="at">data=</span>longley)</span>
+<span id="cb228-3"><a href="multiple-regression.html#cb228-3" tabindex="-1"></a><span class="fu">summary</span>(model1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Employed ~ GNP.deflator + GNP + Unemployed + Armed.Forces + 
+##     Population + Year, data = longley)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.41011 -0.15767 -0.02816  0.10155  0.45539 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -3.482e+03  8.904e+02  -3.911 0.003560 ** 
+## GNP.deflator  1.506e-02  8.492e-02   0.177 0.863141    
+## GNP          -3.582e-02  3.349e-02  -1.070 0.312681    
+## Unemployed   -2.020e-02  4.884e-03  -4.136 0.002535 ** 
+## Armed.Forces -1.033e-02  2.143e-03  -4.822 0.000944 ***
+## Population   -5.110e-02  2.261e-01  -0.226 0.826212    
+## Year          1.829e+00  4.555e-01   4.016 0.003037 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3049 on 9 degrees of freedom
+## Multiple R-squared:  0.9955, Adjusted R-squared:  0.9925 
+## F-statistic: 330.3 on 6 and 9 DF,  p-value: 4.984e-10</code></pre>
+<p>As can be seen in the above output, three variables (, , and ) are not significant.</p>
+<div style="page-break-after: always;"></div>
+<p>Let’s take a stepwise approach, remove the variable with the largest p-value that is not statistically significant, and refit the model. In this case, let’s remove the predictor variable and refit the multiple regression model.</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="multiple-regression.html#cb230-1" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">lm</span>(Employed<span class="sc">~</span>GNP<span class="sc">+</span>Unemployed<span class="sc">+</span>Armed.Forces<span class="sc">+</span>Population<span class="sc">+</span>Year,</span>
+<span id="cb230-2"><a href="multiple-regression.html#cb230-2" tabindex="-1"></a>           <span class="at">data=</span>longley)</span>
+<span id="cb230-3"><a href="multiple-regression.html#cb230-3" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Employed ~ GNP + Unemployed + Armed.Forces + Population + 
+##     Year, data = longley)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.43015 -0.15399 -0.01832  0.10081  0.44964 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -3.450e+03  8.282e+02  -4.165 0.001932 ** 
+## GNP          -3.196e-02  2.420e-02  -1.321 0.216073    
+## Unemployed   -1.972e-02  3.861e-03  -5.108 0.000459 ***
+## Armed.Forces -1.020e-02  1.908e-03  -5.345 0.000326 ***
+## Population   -7.754e-02  1.616e-01  -0.480 0.641607    
+## Year          1.814e+00  4.253e-01   4.266 0.001648 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2897 on 10 degrees of freedom
+## Multiple R-squared:  0.9955, Adjusted R-squared:  0.9932 
+## F-statistic: 438.8 on 5 and 10 DF,  p-value: 2.242e-11</code></pre>
+<div style="page-break-after: always;"></div>
+<p>The variable is again statistically not significant and has the largest p-value, so let’s remove that from the model.</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="multiple-regression.html#cb232-1" tabindex="-1"></a>model3 <span class="ot">=</span> <span class="fu">lm</span>(Employed<span class="sc">~</span>GNP<span class="sc">+</span>Unemployed<span class="sc">+</span>Armed.Forces<span class="sc">+</span>Year,</span>
+<span id="cb232-2"><a href="multiple-regression.html#cb232-2" tabindex="-1"></a>           <span class="at">data=</span>longley)</span>
+<span id="cb232-3"><a href="multiple-regression.html#cb232-3" tabindex="-1"></a><span class="fu">summary</span>(model3)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Employed ~ GNP + Unemployed + Armed.Forces + Year, 
+##     data = longley)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.42165 -0.12457 -0.02416  0.08369  0.45268 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -3.599e+03  7.406e+02  -4.859 0.000503 ***
+## GNP          -4.019e-02  1.647e-02  -2.440 0.032833 *  
+## Unemployed   -2.088e-02  2.900e-03  -7.202 1.75e-05 ***
+## Armed.Forces -1.015e-02  1.837e-03  -5.522 0.000180 ***
+## Year          1.887e+00  3.828e-01   4.931 0.000449 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2794 on 11 degrees of freedom
+## Multiple R-squared:  0.9954, Adjusted R-squared:  0.9937 
+## F-statistic: 589.8 on 4 and 11 DF,  p-value: 9.5e-13</code></pre>
+<p>All of the predictor variables are now statistically significant at <span class="math inline">\(\alpha=0.05\)</span>.<br />
+</p>
+<p>Note that <span class="math inline">\(R^2 = 0.9954\)</span>, so 99.54% of the variability in the number of employed people can be explained by the linear relationship with gross national product (GNP), number of unemployed people, number of people in the armed forces, and year. This is a very large value for <span class="math inline">\(R^2\)</span> which suggests a very good model fit.<br />
+</p>
+<p>One caution is that our predictor variables are highly correlated (see correlation matrix at the beginning of the example), so this could result in high standard errors. This concern of is beyond the scope of this class and is covered in more advanced statistics courses.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="simple-linear-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

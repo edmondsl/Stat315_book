@@ -1,0 +1,759 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(formatR)
+library(tidyverse)
+library(kableExtra)
+
+# Set so that long lines in R will be wrapped:
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=FALSE)
+knitr::opts_chunk$set(cache=TRUE,warning=F)
+knitr::opts_chunk$set(out.height='40%',fig.align = "center")
+add.space = 0
+
+# kable table global setup
+kt <- function(data) {
+  kable(data, align = "c", escape = FALSE) %>%
+    kable_styling(bootstrap_options = c("striped"),
+                  latex_options = c("hold_position"))
+}
+```
+
+# Simple Linear Regression
+
+In Chapter 10, we explored ANOVA, a method for examining the relationship between a categorical variable (with three or more groups or treatments) and a quantitative outcome. In this chapter, we shift to simple linear regression, which analyzes the relationship between two quantitative variables. Linear regression allows us to model and predict how changes in one variable are associated with changes in another, providing insights into trends, correlations, and potential causation in data.
+
+## The Simple Linear Regression Model
+
+In many cases, we wish to quantify and analyze the relationship between two quantitative variables, where one variable helps predict or explain the other.
+
+:::{.example}
+The following data give the speed of cars (mph) and the distances (feet) taken to stop. Note that the data were recorded in the 1920s.
+:::
+
+```{r,out.height="20%"}
+data(cars)
+plot(cars,pch=20)
+```
+
+
+**Variables:**
+
+- X = independent variable / predictor variable / explanatory variable
+
+- Y = dependent variable / response variable
+
+
+In *simple linear regression*, we examine the relationship between a single predictor variable and a single response variable. 
+
+When multiple predictor variables are involved, we use *multiple linear regression*.
+
+**Goal:** Using a simple random sample, we aim to build a model that represents the relationship between $X$ and 
+$Y$ for the population. This model is represented by the **least squares regression line** -- the line that best fits the data points, minimizing the sum of squared differences between observed values and the predictions made by the line.
+
+
+**Estimated Regression Equation:**
+
+\vfill
+
+**Population Model:**
+
+\vfill
+
+
+**Assumptions and Notes for Simple Linear Regression (SLR):**
+
+1. **Linearity in the Parameters**: The relationship between \( X \) and \( Y \) can be described using linear parameters \( \beta_0 \) and \( \beta_1 \) in the equation \( Y = \beta_0 + \beta_1 X + \epsilon \).
+
+2. **Error Assumptions**: The errors (\( \epsilon_i \)) are independent, identically distributed normal random variables with mean 0 and constant variance \( \sigma^2 \). One objective of SLR is to estimate \( \sigma^2 \), the variance of these errors.
+
+3. **Expected Value of \( Y \)**: For a given value of \( X \), the mean of \( Y \) is represented by the line of best fit:
+   \[E[Y|X] = \beta_0 + \beta_1 X \]
+
+4. **Estimating \( \sigma \)**: Because observed data points do not lie exactly on the line of best fit, we estimate \( \sigma \) to quantify the spread or variability of data around this line.
+
+\newpage
+
+## Correlation
+
+**Recall:** *Correlation* is a measure of *linear relationship* between two quantitative variables. The population correlation coefficient is represented by $\rho$ and the sample correlation coefficient is represented by $r$.
+
+Correlation is related to covariance, $\rho = \frac{Cov(X,Y)}{\sigma_X \sigma_Y}$, but it is independent of units and is bounded by $\pm 1$, i.e., $-1 \leq \rho \leq 1$.
+
+If two variables are uncorrelated, then they are not necessarily independent. This could be the case if the variables have a nonlinear relationship.
+
+\[r = \frac{S_{xy}}{\sqrt{S_{xx}}\sqrt{S_{yy}}}, \text{where } S_{xx} = \sum_{i=1}^n (x_i-\bar{x})^2, S_{yy} = \sum_{i=1}^n (y_i-\bar{y})^2, S_{xy} = \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})\] 
+
+:::{.example}
+Some examples of some scatterplots and their associated sample correlation coefficients.
+:::
+
+```{r, out.height="50%",echo=F,quietly=F,message=F}
+library(Rmisc,quietly=T)
+library('MASS',quietly=T)
+set.seed(2019)
+
+samples = 100
+r = c(0.99,0.72,0.08,-.82,-.23)
+
+
+data = mvrnorm(n=samples, mu=c(0, 0), Sigma=matrix(c(1, r[1], r[1], 1), nrow=2), empirical=TRUE);
+x1 = data[, 1]; y1 = data[, 2]
+data = mvrnorm(n=samples, mu=c(0, 0), Sigma=matrix(c(1, r[2], r[2], 1), nrow=2), empirical=TRUE);
+x2 = data[, 1]; y2 = data[, 2]
+data = mvrnorm(n=samples, mu=c(0, 0), Sigma=matrix(c(1, r[3], r[3], 1), nrow=2), empirical=TRUE);
+x3 = data[, 1]; y3 = data[, 2]
+data = mvrnorm(n=samples, mu=c(0, 0), Sigma=matrix(c(1, r[4], r[4], 1), nrow=2), empirical=TRUE);
+x4 = data[, 1]; y4 = data[, 2]
+data = mvrnorm(n=samples, mu=c(0, 0), Sigma=matrix(c(1, r[5], r[5], 1), nrow=2), empirical=TRUE);
+x5 = data[, 1]; y5 = data[, 2]
+x6 = runif(samples,min = -3,max=3); x6[51:100] = -x6[1:50]
+y6 = x6^2 + rnorm(samples,mean=0,sd=2)
+
+p1 = qplot(x1,y1) + ggtitle("r = 0.99")
+p2 = qplot(x2,y2) + ggtitle("r = 0.7")
+p3 = qplot(x3,y3) + ggtitle("r = 0.08")
+p4 = qplot(x4,y4) + ggtitle("r = -0.82")
+p5 = qplot(x5,y5) + ggtitle("r = -0.23")
+p6 = qplot(x6,y6) + ggtitle("r = -0.04")
+multiplot(p1,p4,p2,p5,p3,p6,cols=3)
+```
+
+**Note: Correlation does not imply causation!**
+
+\newpage
+
+## Estimating Model Parameters
+
+**Criterion for determining the line of best fit**
+
+ We want to minimize the sum of squared errors (SSE), that is, we want to find $b_0$ and $b_1$ that minimize $SSE = \sum_{i=1}^n [y_i - (b_0 + b_1 x)]^2$.
+
+ **Illustration:**
+\vfill
+
+ **Normal Equations:**
+\vfill
+
+**SLR estimates**
+
+\[\text{Estimated Regression Equation: } \hat{y} = b_0 + b_1 x\]
+
+\[b_0 = \bar{y} - b_1 \bar{x}\]
+
+\[b_1 = \frac{S_{xy}}{S_{xx}} = \frac{s_y}{s_x} \cdot r_{xy} = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2}\]
+
+\[S_{xx} = \sum_{i=1}^n (x_i-\bar{x})^2 \qquad S_{yy} = \sum_{i=1}^n (y_i-\bar{y})^2 \qquad S_{xy} = \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})\]
+
+**Interpreting $b_1$ and $b_0$**
+
+The estimated slope, $b_1$, can be interpreted as the estimated change in y for a unit increase in x.
+
+The estimated intercept, $b_0$, can be interpreted as the estimated value of y when x is 0.
+
+\newpage
+
+:::{.example} 
+Fill in the table to calculate the estimated regression equation and plot it on the figure below.
+:::
+
+
+
+|                             |       |       |       |       |       |  $\Sigma$     |
+|-----------------------------|--------------|--------------|--------------|--------------|--------------|--------------|
+| $x_i$               | 1     | 2     | 3     | 4     | 5     | |
+| $y_i$               | 3     | 5.5   | 5.5   | 6.5   | 9.5   | |
+| $x_i - \bar{x}$     |       |       |       |       |       | |
+| $(x_i - \bar{x})^2$ |       |       |       |       |       | |
+| $y_i - \bar{y}$     |       |       |       |       |       | |
+| $(x_i - \bar{x})(y_i - \bar{y})$ | |       |       |       |       | |
+
+
+\vfill
+
+```{r,echo=F,out.height="40%",fig.align='right'}
+par(mar=c(4,4,0,0))
+x = c(1,2,3,4,5)
+y = c(3,5.5,5.5,6.5,9.5)
+plot(x,y,pch=20,panel.first = grid(),xlim=c(0,5),ylim=c(0,10))
+```
+
+\newpage
+
+
+:::{.example} 
+Here's how to use R to do the calculations.
+:::
+
+```{r}
+# enter the data
+x = c(1,2,3,4,5)
+y = c(3,5.5,5.5,6.5,9.5)
+
+# run the linear regression and see the results
+model = lm(y~x)
+summary(model)
+```
+
+\newpage
+
+
+
+:::{.example} 
+Here is the car stopping distance example given at the beginning of the chapter. Note that we will load the ``cars'' dataset that is provided in R.
+:::
+
+```{r}
+# load the data
+data(cars)
+
+# run the regression and summarize the results
+model = lm(dist~speed,data=cars)
+summary(model)
+```
+
+
+```{r,out.height="25%"}
+# plot the data and the line of best fit
+plot(dist~speed,data=cars,pch=20)
+abline(model)
+```
+
+\newpage
+
+## Assessing Model Fit and Inferences for the Slope Parameter, $\beta_1$
+
+While an estimated regression equation can be calculated for any set of data pairs, it is essential to determine whether a linear model is appropriate for the data.
+
+There are multiple ways to assess model fit.
+ 
+1. Coefficient of determination, $R^2$
+2. Linear Regression Hypothesis Test for $b_1$
+3. Model diagnostics (more on this later)
+
+
+**ANOVA for Regression**
+
+ Often, we wish to analyze the quality of the estimated regression equation line using an *analysis of variance approach*. In this setup, the total variation of the dependent variable is partitioned into subcomponents.
+
+ $\boxed{SST = \sum_{i=1}^n (y_i -\bar{y})^2}$ = total sum of squares = ``total variation'' 
+
+ $\boxed{df_T = n-1}$ (n = sample size)
+
+ $\boxed{SSR = \sum_{i=1}^n (\hat{y_i} - \bar{y})^2}$ = regression sum of squares = "variation explained by the predictor x"
+ 
+$\boxed{df_R = p}$ (p = number of predictors, p=1 for SLR)
+
+ $\boxed{SSE = \sum_{i=1}^n (\hat{y_i} - y_i)^2}$ = error sum of squares = "variation not explained by the predictor x"
+ $\boxed{df_E = n-p-1}$ 
+
+ **Note:** We can estimate $\sigma^2$ with $s^2 = MSE$. 
+
+:::{.example} 
+Here's how to get the ANOVA output for the car stopping example.
+:::
+
+```{r}
+anova(model)
+```
+
+\newpage
+
+**Coefficient of Determination, $R^2$**
+
+$\boxed{R^2 = \frac{SSR}{SST}}$ 
+
+ This is the proportion of the variation in Y that is explained by X.
+
+ Higher $R^2$ is typically preferred and suggests a better "fit" (*careful!*)
+
+ $R^2 = r_{xy}^2$, where $r_{xy}$ is the correlation coefficient.
+ 
+ \vfill
+
+**Linear Regression Hypothesis Test**
+
+ Is there a linear relationship between the predictor(s) and the response? $H_0: \beta_1 = 0$ vs. $H_a: \beta_1 \neq 0$
+
+ $\boxed{F_{test} = \frac{MSR}{MSE}}$ ($df_1 = p$, $df_2 = n-p-1$)
+
+ For SLR, this is equivalent to a t-test.
+
+ If $F_{test}$ is large, then there is evidence that there is a significant linear relationship between the predictor(s) and the response.
+ 
+ \vfill
+
+:::{.example} 
+Let's look again at regression output for the cars dataset to see the results of the hypothesis test.
+:::
+
+```{r}
+summary(model)
+```
+
+
+\newpage
+
+**Inferences About the Slope Parameter $\beta_1$**
+
+Assuming we have met the assumptions of linear regression (i.e., IID normal errors), then we can create a confidence interval for $\beta_1$ or run a hypothesis test of linear relationship ($H_0: \beta_1 = 0$ vs. $H_a: \beta_1 \neq 0$.
+
+1. $E[b_1] = \beta_1$ ($b_1$ is an unbiased estimator of $\beta_1$)
+
+2. $Var(b_1) = \sigma_{b_1}^2 = \frac{\sigma^2}{S_{xx}} = \frac{\sigma^2}{\sum (x_i - \bar{x})^2}$
+
+3. $s_{b_1} = \frac{s}{\sqrt{S_{xx}}} = \frac{s}{\sqrt{\sum (x_i - \bar{x})^2}}$
+
+4. The estimator $b_1$ has a normal distribution.
+
+5. $t = \frac{b_1 - \beta_1}{s_{b_1}}$ has a t-distribution with $n-p-1$ degrees of freedom.
+
+
+:::{.example} 
+Create a 95\% confidence interval for $\beta_1$ using the "cars" dataset and determine if there is evidence of a linear relationship between \textit{speed} and \textit{stopping distance}.
+:::
+
+\vfill 
+
+```{r}
+confint(model)
+```
+
+\newpage
+
+
+
+## The Prediction of Future Y Values
+
+ Given a specific value of X (denoted $x_p$), we can use the estimated regression equation to calculate a point estimate or **fitted value** of Y, denoted $\hat{y}_p$, by simply plugging $x_p$ into the estimated regression equation. $\hat{y}_p = b_0 + b_1 x_p$ 
+
+ The **residual** of the i$^{th}$ observation is $r_i = y_i - \hat{y}_i = \text{actual y value} - \text{predicted y value}$.
+
+:::{.example} 
+Suppose we want to estimate the stopping distance for a car going 20.5mph. We can get this estimate by simply plugging this value into our estimated regression equation. Recall that the estimated regression equation is: $\hat{y} = -17.5791 + 3.9324 x$.
+:::
+
+```{r,echo=F}
+# plot the data and the line of best fit
+plot(dist~speed,data=cars,pch=20)
+abline(model)
+abline(h=63.027,lty=2)
+abline(v=20.5,lty=2)
+points(20.5,63.027,'o')
+```
+
+ In the above example, we computed a point estimate for the stopping distance of a car going 20.5mph. As with other topics we've explored so far in statistics, we prefer to have a measure of uncertainty attached with all point estimates.
+
+For regression, this leads us to two kinds of intervals:
+
+1. Confidence interval for mean response
+
+2. Prediction interval for a new data value
+
+ **Confidence intervals for mean response** tell us how well we have determined the mean function, $E[Y|X]$, i.e., the line of best fit.
+
+ **Prediction intervals for a new data** value tell us how well we can estimate the dependent value for a given new predictor value.
+
+ These are fundamentally two different kinds of intervals.
+
+\newpage
+
+**Confidence Interval for Mean Response**
+
+ A **confidence interval for mean response** creates an uncertainty estimate for the line of best fit, i.e., the mean function, $E[Y|X]$.
+
+ In other words, a confidence interval for mean response creates an interval of plausible values for the average response value for a given predictor value.
+
+:::{.theorem}
+Let $x_p$ be the value of the predictor variable and let $\hat{y}_p = b_0 + b_1 x_p$ be the fitted value. Then:
+
+1. $E[\hat{y}_p] = \beta_0 + \beta_1 x_p$
+    
+2. $Var(\hat{y}_p) = MSE \cdot \left(\frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)$
+    
+3. $SE(\hat{y}_p) = \sqrt{MSE \cdot \left(\frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)}$
+    
+4. A confidence interval for the mean response is given by:
+\[\hat{y}_p \pm t_{\alpha/2,n-2} \cdot \sqrt{MSE \cdot \left(\frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)} \]
+    
+:::
+
+
+ The theorem above allows for us to create confidence intervals for $E[y_p]$, i.e., the mean response for a given x-value.
+
+:::{.example} 
+Create a confidence interval for the mean response stopping distance for a car moving at 20.5 miles per hour. Note: $n=50$, $\bar{x} = 15.4$, $\sum (x_i-\bar{x})^2 = 1370$, $\sqrt{MSE} = 15.38$, $t_{c.v.}=2.01$.
+:::
+
+
+
+\vfill
+
+```{r}
+# t critical value (95% CI, df=48)
+qt(.975,48)
+
+# create confidence interval for mean response at x_p = 20.5
+predict(model, newdata = data.frame(speed=20.5), interval = "confidence")
+```
+
+\newpage
+
+ We can also create a simultaneous confidence band for mean response for the entire regression line. Note that these band are parabolic.
+
+:::{.example} 
+Create a 95\% confidence band for the mean response of the cars dataset.
+:::
+
+```{r}
+# plot the data and the line of best fit
+plot(cars)
+abline(model)
+
+# create a grid of speed values and put into a data frame
+speed.grid = seq(min(cars$speed), max(cars$speed), by=0.1)
+speed.df = data.frame(speed=speed.grid)
+
+# calculate the confidence interval at each grid point and plot
+conf_interval = predict(model, newdata=speed.df,
+                        interval="confidence",level = 0.95)
+lines(speed.grid, conf_interval[,2], col="blue", lty=2)
+lines(speed.grid, conf_interval[,3], col="blue", lty=2)
+```
+
+Is it plausible that the mean response at $x_p=20$ mph is 80 feet?
+
+\newpage
+
+**Prediction Interval for a New Data Value**
+
+ A **prediction interval for a new data value** creates an uncertainty estimate for a new data value. Note that this uncertainty is a combination of uncertainty from the line of best fit as well as the uncertainty from a single new observation.
+
+ In other words, a prediction interval for a new data value creates an interval of plausible values for the response value for a given new predictor value.
+
+:::{.theorem}
+Let $x_p$ be the value of the predictor variable and let $\hat{y}_p = b_0 + b_1 x_p$ be the fitted value. Then:
+
+1. $E[\hat{y}_p] = \beta_0 + \beta_1 x_p$
+
+2. $Var(\hat{y}_p) = MSE \cdot \left(1 + \frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)$
+    
+3. $SE(\hat{y}_p) = \sqrt{MSE \cdot \left(1 +\frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)}$
+    
+4. A prediction interval for a new observation is given by:
+    \[\hat{y}_p \pm t_{\alpha/2,n-2} \cdot \sqrt{MSE \cdot \left(1 + \frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)} \]
+:::
+
+The theorem above allows for us to create prediction intervals for $y_p$, i.e., the response for a new x-value..\\
+
+:::{.example} 
+Create a 95\% prediction interval for a car moving at 20.5 miles per hour. Note: $n=50$, $\bar{x} = 15.4$, $\sum (x_i-\bar{x})^2 = 1370$, $\sqrt{MSE} = 15.38$, $t_{c.v.}=2.01$.
+:::
+
+\vfill
+
+```{r}
+# create confidence interval for mean response at x_p = 20.5
+predict(model, newdata = data.frame(speed=20.5), interval = "prediction")
+```
+
+\newpage
+
+We can also create a simultaneous prediction band for a new data value for the entire regression line. Note that these band are linear and parallel.
+
+:::{.example} 
+Create a 95\% prediction band for a new response of the cars dataset.
+:::
+
+```{r}
+# plot the data and the line of best fit
+plot(cars)
+abline(model)
+
+# create a grid of speed values and put into a data frame
+speed.grid = seq(min(cars$speed), max(cars$speed), by=0.1)
+speed.df = data.frame(speed=speed.grid)
+
+# calculate the confidence interval at each grid point and plot
+conf_interval = predict(model, newdata=speed.df,
+                        interval="prediction",level = 0.95)
+lines(speed.grid, conf_interval[,2], col="blue", lty=2)
+lines(speed.grid, conf_interval[,3], col="blue", lty=2)
+```
+
+Is it plausible that a car going 20 mph has a stopping distance of 80 feet?
+
+\newpage
+
+## Model Diagnostics
+
+ **Recall:** Simple linear regression makes a number of assumptions which should be checked to make sure that such a model is appropriate.
+ 
+
+ **Assumptions:**
+ 
+ 1. **Linearity:** the mean response of the response variable is a linear function of the predictor variable. In multiple regression, the response variable is a linear combination of the predictor variables.
+ 
+ 2. **Constant Variance:** different values of the predictor variables have the same variance in their errors. This is also called *homoscedasticity*.
+ 
+ 3. **Normal Errors:** all errors are normally distributed (with constant variance).
+ 
+ 4. **Independent Errors:** all errors are independent.
+
+Examples of how to diagnose assumptions (1)-(3) will be given with toy datasets that either meet or violate the assumptions.
+
+ Here's how to obtain diagnostic plots in R.
+
+```{r,eval=F}
+model = lm(dist~speed,data=cars)
+plot(model)
+```
+
+```{r,echo=F}
+par(mfrow=c(2,2))
+plot(model)
+```
+
+\newpage
+
+**Linearity**
+
+Two toy datasets will be created, one linear and one nonlinear. Residual analysis will be used identify violations to the linearity assumption.
+
+```{r}
+set.seed(2020)
+n=100
+x = runif(n) # some random x-values
+y1 = x + rnorm(n,sd=0.1) # linear
+y2 = x^2 + rnorm(n,sd=0.1) # nonlinear
+```
+
+\vfill
+  
+```{r,echo=F,out.height="30%"}
+plot(y1~x,pch=19)
+points(y2~x,col=2,pch=20)
+lm1 = lm(y1~x)
+lm2 = lm(y2~x)
+abline(lm1,lwd=2)
+abline(lm2,col=2,lwd=2)
+legend(x=0.7,y=0.1,legend = c("Linear","Nonlinear"),lty=1:2,col=1:2)
+
+par(mfrow=c(1,2))
+plot(lm1,which=1)
+plot(lm2,which=1)
+```
+
+\vfill
+
+\newpage
+
+**Constant Variance**
+
+Two toy datasets will be created, one with constant variance and one with nonconstant. Residual analysis will be used identify violations to the constant variance assumption.
+
+```{r}
+set.seed(2020)
+n=100
+x = runif(n) # some random x-values
+y1 = x + rnorm(n,sd=1) # constant variance
+y2 = x + rnorm(n,sd=x) # nonconstant variance
+```
+
+\vfill
+
+```{r,echo=FALSE,out.height="30%"}
+plot(y1~x,pch=19)
+points(y2~x,col=2,pch=20)
+lm1 = lm(y1~x)
+lm2 = lm(y2~x)
+abline(lm1,lwd=2)
+abline(lm2,col=2,lwd=2)
+legend(x=0.6,y=-1,legend = c("Constant Var","Nonconstant Var"),lty=1:2,col=1:2)
+
+par(mfrow=c(1,2))
+plot(lm1,which=1)
+plot(lm2,which=1)
+```
+
+\vfill
+
+\newpage
+
+**Normal Errors**
+
+Two toy datasets will be created, one with normal errors and one with Cauchy errors. A QQ-plot will be used identify violations to the normal errors assumption.
+
+```{r}
+set.seed(2020)
+n=100
+x = runif(n) # some random x-values
+y1 = x + rnorm(n,sd=0.1) # normal errors
+y2 = x + rcauchy(n,scale = 0.01) # laplace errors
+```
+
+\vfill
+
+```{r,echo=F,out.height="30%"}
+plot(y1~x,pch=19)
+points(y2~x,col=2,pch=20)
+lm1 = lm(y1~x)
+lm2 = lm(y2~x)
+abline(lm1,lwd=2)
+abline(lm2,col=2,lwd=2)
+legend(x=0.7,y=0.1,legend = c("Normal","Cauchy"),lty=1:2,col=1:2)
+par(mfrow=c(1,2))
+plot(lm1,which=2)
+plot(lm2,which=2)
+```
+
+\vfill
+
+\newpage
+
+## Extrapolation
+
+**Extrapolation**
+
+*Extrapolation* involves using a regression model to predict values outside the observed data range. Such predictions can be unreliable, as relationships may not hold beyond the data limits, and unknown factors can affect outcomes. Caution is advised when extrapolating beyond the observed  $X$-values.
+
+Here are two examples:
+
+1. **Estimating Housing Prices**: A model based on recent trends might suggest a steady increase in housing prices. However, extrapolating beyond the observed data range could overlook economic shifts or policy changes, resulting in overly optimistic predictions.
+
+2. **Drug Dosage Effects**: In medical studies, the relationship between dosage and effectiveness may appear linear within a safe range. Extrapolating to higher doses could ignore toxicity limits, leading to predictions that overestimate benefits and underestimate potential risks. 
+
+\bigskip
+
+:::{.example}
+The age and weight of Aaron's cat, Ellie, is plotted below for her first 10 months. How much would you predict Ellie weighed after 1000 days? [Caution: Extrapolation!]
+:::
+
+```{r,echo=F,message=F}
+# Define data
+days <- c(0, 85, 113, 122, 171, 197, 202, 228, 244, 283, 301)
+weights <- c(0, 3.3, 5, 5.31, 6.7, 8.8, 8.5, 9.5, 10.10, 10.98, 12.1)
+data <- data.frame(days = days, weights = weights)
+
+# Fit the linear model
+model <- lm(weights ~ days, data = data)
+
+# Extract the coefficients for annotation
+intercept <- round(coef(model)[1], 2)
+slope <- round(coef(model)[2], 4)
+equation <- paste0("y = ", intercept, " + ", slope, " * x")
+
+# Create the plot with black points, blue regression line, and confidence intervals
+ggplot(data, aes(x = days, y = weights)) +
+    geom_point(color = "black") +  # Black data points
+    geom_smooth(method = "lm", color = "blue", fill = "blue", alpha = 0.1) +  # Blue regression line and CI
+    labs(title = "Ellie's Weight Over Time",
+         x = "Time (days)",
+         y = "Weight (pounds)") +
+    annotate("text", x = 120, y = 10, label = equation, color = "black", size = 5, hjust = 0) +
+    theme_minimal()
+```
+\newpage
+
+Below is Ellie's weight up until day 1000. How does this compare with prediction using data up until day 300?
+
+```{r,echo=F,message=F}
+days <- c(0, 85, 113, 122, 171, 197, 202, 228, 244, 283, 301, 327, 336, 347, 354, 408, 454, 491, 504, 
+          506, 508, 512, 521, 527, 547, 555, 575, 583, 618, 645, 679, 722, 753, 772, 786, 807, 
+          821, 842, 883, 904, 911, 944, 953, 974, 981)
+weights <- c(0.00, 3.30, 5.00, 5.31, 6.70, 8.80, 8.50, 9.50, 10.10, 10.98, 12.10, 11.60, 12.20, 11.60, 
+             11.40, 10.60, 10.98, 10.90, 11.30, 11.30, 11.50, 11.60, 11.40, 11.50, 11.80, 11.60, 
+             11.40, 12.00, 12.00, 12.40, 12.00, 11.40, 11.80, 11.50, 11.60, 11.60, 11.70, 11.90, 
+             12.20, 12.00, 12.00, 12.00, 12.30, 12.20, 12.20)
+
+# Define the data frame
+data <- data.frame(days = days, weights = weights)
+
+# Create the plot
+ggplot(data, aes(x = days, y = weights)) +
+    geom_point(color = "black") +  # Scatter plot with black points
+    geom_smooth(method = "loess", color = "steelblue", alpha = 0.1) +  # Regression line with confidence interval
+    geom_abline(intercept = 0.23, slope = 0.04, color = "blue", linetype = "dashed") +  # Custom line y = 0.23 + 0.04*x
+    labs(title = "Ellie's Weight Over Time",
+         x = "Time (days)",
+         y = "Weight (pounds)") +
+    
+    ylim(0, 40) +
+    theme_minimal()
+```
+
+![Ellie the Cat](images/ellie.jpg){width=40%}
+\newpage
+
+## R Companion for Chapter 11
+
+:::{.example}
+The \textbf{pressure} dataset is provided in the base version of R. The data is on the relation between temperature in degrees Celsius and vapor pressure of mercury in millimeters (of mercury).
+:::
+
+Let's begin by looking at the header of the data and calculating the correlation.
+
+```{r}
+data(pressure)
+head(pressure)
+cor(pressure)
+```
+
+The correlation matrix is given in the example above. The diagonal elements of the correlation matrix shows that any variable is perfectly correlated with itself (i.e., $r_{xx} = 1$). In the off diagonal, you can see the correlation between the \textbf{temperature} and \textbf{pressure} is 0.758 which a strong, positive linear relationship.
+
+\newpage
+
+Let's fit a simple linear regression model with the \textbf{temperature} being the predictor variable and \textbf{pressure} being the response variable.
+
+```{r}
+model = lm(pressure~temperature,data=pressure)
+summary(model)
+```
+
+The estimated regression is $\hat{pressure} = -147.90 + 1.51 \cdot temperature$. A one degree Celsius increase in temperate of mercury is associated with an increase of 1.51 in vapor pressure.\\
+
+\newpage
+
+Is this model appropriate? Let's plot the data along with the line of best fit.
+
+```{r,out.width="70%"}
+plot(pressure~temperature,data=pressure)
+abline(model)
+```
+
+As seen in the above plot, our simple linear regression model is completely inadequate. We could determine that a nonlinearity exists by looking at the first residual diagnostic plot.
+
+```{r,out.width="70%"}
+plot(model,which=1)
+```
+
+In this diagnostic plot, we see strong evidence of an unaccounted for nonlinearity as the shape of the graph is not approximately flat.
+
+\newpage
+
+Based on the scatterplot on the previous page, there appears to be a possibly exponential relationship between temperature and pressure. Let's try log transforming pressure and refitting the linear regression model. (Note: Variable transformations are covered in Chapter 12.)
+
+```{r}
+model2 = lm(log(pressure)~temperature,data=pressure)
+summary(model2)
+```
+
+\newpage
+
+```{r,out.width="70%"}
+plot(pressure~temperature,data=pressure)
+
+x.new = 0:350
+y.new = predict(model2,newdata=list(temperature=x.new,interval="confidence"))
+lines(x.new,exp(y.new))
+```
+
+This model seems to fit the data better than the untransformed simple linear regression model but is still somewhat inadequate for temperatures greater than 300C. Additionally, the residual diagnostic plot suggest our model is inadequate. A better model should be found if modeling temperatures above 300C is of interest.
+
+```{r,out.width="70%"}
+plot(model2,which=1)
+```

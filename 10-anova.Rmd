@@ -1,0 +1,483 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(formatR)
+library(tidyverse)
+library(kableExtra)
+
+# Set so that long lines in R will be wrapped:
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=FALSE)
+knitr::opts_chunk$set(cache=TRUE,warning=F)
+knitr::opts_chunk$set(out.height='40%',fig.align = "center")
+add.space = 0
+
+# kable table global setup
+kt = function(data) {
+  kable(data, align = "c", escape = FALSE) %>%
+    kable_styling(bootstrap_options = c("striped"),
+                  latex_options = c("hold_position"))
+}
+```
+
+# Analysis of Variance (ANOVA)
+
+In Chapter 9, we compared population means and proportions between two groups. Here, we extend this analysis to Analysis of Variance (ANOVA), a method for comparing the means across three or more populations. ANOVA helps us determine if observed differences among group means are statistically significant or due to chance, making it a valuable tool for analyzing differences across multiple groups in various fields.
+
+## Single-Factor ANOVA
+
+**Illustration of ANOVA**
+
+\vfill
+
+
+**Motivation:**
+
+Q: Are the means the same in each population? Does $\mu_1 = \mu_2 = \ldots = \mu_k$?
+
+A: Collect a sample from each population and use ANOVA to make the determination.
+
+Our hypotheses will be the following:
+
+$H_0:\mu_1 = \mu_2 = \ldots = \mu_k$
+ 
+$H_a:\text{ at least one } \mu_i \text{ differs}$
+
+\smallskip
+
+ Recall that a two-sample t-test will compare the means of two populations (or treatments).
+ 
+ ANOVA extends this to 3 or more populations (or treatments).
+ 
+\newpage
+
+:::{.example}
+Do the average GPAs (grade point averages) differ by class level at this university?
+
+A small pilot study looked into this possibility by collecting GPAs from five randomly selected students from each of four levels (first-year through fourth-year). 
+:::
+
+
+```{r, echo=F}
+# Define GPA data for each year
+fresh.gpa = c(2.05, 2.20, 2.00, 2.50, 2.75)
+soph.gpa = c(3.00, 2.80, 3.80, 3.60, 3.30)
+junior.gpa = c(3.30, 3.20, 2.30, 2.90, 3.30)
+senior.gpa = c(3.50, 3.10, 2.90, 3.00, 4.00)
+
+# Calculate summary statistics and round to three decimal places
+summary_stats = data.frame(
+  Year = c("Freshman", "Sophomore", "Junior", "Senior"),
+  Sample_Size = c(length(fresh.gpa), length(soph.gpa), length(junior.gpa), length(senior.gpa)),
+  Sample_Mean = round(c(mean(fresh.gpa), mean(soph.gpa), mean(junior.gpa), mean(senior.gpa)), 3),
+  Sample_Std_Dev = round(c(sd(fresh.gpa), sd(soph.gpa), sd(junior.gpa), sd(senior.gpa)), 3)
+)
+
+# Display table using kable
+library(knitr)
+kable(summary_stats, col.names = c("Year", "Sample Size", "Sample Mean", "Sample Std Dev"))
+```
+
+\smallskip
+
+```{r,echo=F,message=F}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Define GPA data for each year
+fresh.gpa = c(2.05, 2.20, 2.00, 2.50, 2.75)
+soph.gpa = c(3.00, 2.80, 3.80, 3.60, 3.30)
+junior.gpa = c(3.30, 3.20, 2.30, 2.90, 3.30)
+senior.gpa = c(3.50, 3.10, 2.90, 3.00, 4.00)
+
+# Combine into a single data frame
+gpa_data = data.frame(
+  Year = factor(rep(c("Freshman", "Sophomore", "Junior", "Senior"), each = 5), 
+                levels = c("Freshman", "Sophomore", "Junior", "Senior")),
+  GPA = c(fresh.gpa, soph.gpa, junior.gpa, senior.gpa)
+)
+
+# Create the ggplot
+ggplot(gpa_data, aes(x = Year, y = GPA)) +
+  geom_boxplot(fill = "lightblue", color = "darkblue") +
+  labs(title = "GPA by Year", x = "Year", y = "GPA") +
+  theme_minimal()
+```
+
+
+\vfill
+
+Is there enough evidence to suggest that the average GPA is not the same for all four levels?
+ 
+Our hypotheses for this example will be:
+
+\vfill \vfill \vfill \vfill
+
+\newpage
+
+:::{.definition} 
+A ***factor*** is a characteristic that distinguishes between populations or treatments. 
+:::
+
+:::{.definition} 
+A ***level*** of a factor is one specific population or treatment within that factor. 
+:::
+
+:::{.example} 
+We want to test the average effectiveness of four different drugs in treating a specific condition.
+
+Factor: 
+
+Levels: 
+
+:::
+
+\vfill
+
+:::{.example}
+We want to compare the average growth of sunflowers for six growing conditions.
+
+Factor:
+
+Levels:
+
+:::
+
+\vfill
+
+We will measure a quantitative response (Y) for a sample from each level of the factor. Often, ANOVA data come from a controlled experiment, where $k$ represents the number of levels, treatments, or populations.
+
+**Notation:**
+
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|c|} \hline
+     & \multicolumn{2}{|c|}{True Population Parameters}  & \multicolumn{3}{|c|}{Sample Statistics}\\ \hline
+     Group & Mean & Variance & Mean & Variance & Sample Size \\ \hline
+    Group \#1 & $\mu_1$ & $\sigma_1^2$ & $\bar{x}_1$ & $s_1^2$ & $n_1$ \\ \hline
+    Group \#2 & $\mu_2$ & $\sigma_2^2$ & $\bar{x}_2$ & $s_2^2$ & $n_2$ \\ \hline
+    $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\ \hline
+     Group \#$k$ & $\mu_k$ & $\sigma_k^2$ & $\bar{x}_k$ & $s_k^2$ & $n_k$ \\ \hline
+    \end{tabular}
+\end{table}
+
+\[N = n_1 + n_2 + \ldots + n_k\]
+
+\[T = n_1 \bar{x}_1 + n_2 \bar{x}_2 + \ldots + n_k \bar{x}_2 \]
+
+\[\bar{\bar{x}}= T/N\]
+
+\newpage
+
+:::{.definition}
+***Sum of Squares*** (SS) quantifies two types of variation in data.
+:::
+
+ (1) **Treatment Sum of Squares (SSTR)** - measures the variability between groups.
+ 
+ *How far apart are the sample means of the k populations?*
+
+\[SSTR = n_1(\bar{x}_1 - \bar{\bar{x}})^2 + n_2(\bar{x}_2 - \bar{\bar{x}})^2 + \ldots +
+n_k(\bar{x}_k - \bar{\bar{x}})^2\]
+
+\[df_{TR} = k-1\] 
+
+ (2) **Error Sum of Squares (SSE)** - measures the variability **within** the k populations.
+ 
+ *How spread out are the individual populations?*
+
+\[SSE = (n_1-1)s_1^2 + (n_2-1)s_2^2 + \ldots (n_k-1)s_k^2\]
+\[df_{E} = N-k\] 
+
+ (3) **Total Sum of Squares (SST)} - measures the total variability in the data, ignoring populations and treatments.
+
+\[SST = SSTR + SSE = \sum (x-\bar{\bar{x}})^2\]
+
+\[df_T = N-1\] 
+
+:::{.example}
+Calculate SSTR, SSE, and SST (and the associated degrees of freedom) for GPA data set.
+:::
+
+\newpage
+
+**Mean Squares**
+
+:::{.definition}
+In ANOVA, a ***mean square*** (MS) represents an average measure of variation. It is obtained by dividing a sum of squares (SS) by its associated degrees of freedom (df). Each mean square provides a way to quantify the average variability within or between groups, allowing us to make comparisons across different sources of variation in the data.
+:::
+
+\[MSTR = \frac{SSTR}{k-1}\]
+
+
+\[MSE = \frac{SSE}{N-k}\] 
+
+An ANOVA F-statistic can be calculated from the mean squares as follows:
+
+\[F_{test} = \frac{MSTR}{MSE}, df_1 = k, df_2 = N-k\]
+
+Some notes:
+
+- Under the null hypothesis $H_0$ ($\mu_1 = \mu_2 = \ldots \mu_k$), $MSTR \approx MSE$.
+
+- If all population means are equal, $F_{test} \approx 1$.
+
+- If one or more of the populatino means are not equal, $F_{test} >> 1$.
+
+- $F_{test}$ follows an F-distribution with parameters $df_1 = k$, $df_2 = N-k$
+
+:::{.example}
+Calculate MSTR, MSE, $F_{test}$, and the p-value for the GPA data set.
+:::
+
+\vfill
+
+\newpage
+
+**ANOVA Assumptions**
+
+ANOVA assumes that population or treatment distributions are normal and have equal variances. While these assumptions can be checked in R, we will generally assume they hold for the examples analyzed here.
+
+\smallskip
+
+
+**$\chi^2$ distribution**
+
+\begin{enumerate}
+\item $\chi_k^2$ is a continuous random variable, where k is the degrees of freedom.
+\item A $\chi_k^2$ random variable is the sum of k independent squared standard normal random variables.
+\item Suppose $Z_1, Z_2, \ldots, Z_k$ are independent standard normal random variables. Then $\sum_{i=1}^k Z_i^2 \sim \chi_k^2$.
+\item $\chi_k^2 \geq 0$
+\item pdf of $\chi^2$ distribution:
+\end{enumerate}
+
+```{r,echo=F,out.height='20%'}
+# Load necessary library
+library(ggplot2)
+
+# Set degrees of freedom
+k = 5
+
+# Define a sequence of x values for plotting
+x_values = seq(0, 20, by = 0.1)
+
+# Calculate the chi-squared pdf for each x value
+pdf_values = dchisq(x_values, df = k)
+
+# Create a data frame for plotting
+chi_squared_data = data.frame(x = x_values, pdf = pdf_values)
+
+# Plot the chi-squared distribution
+ggplot(chi_squared_data, aes(x = x, y = pdf)) +
+  geom_line(color = "blue", linewidth = 1) +
+  labs(title = expression(paste("Chi-Squared Distribution with ", df == 5)),
+       x = "x",
+       y = "Density") +
+  theme_minimal()
+```
+
+
+
+**F distribution**
+
+\begin{enumerate}
+\item $F_{df_1,df_2}$ is a continuous random variable with two parameters, $df_1$ and $df_2$, that correspond to the numerator and denominator degrees of freedom.
+\item An F random variable is the ratio of two $\chi^2$ distributions, so it will always be non-negative.
+\item $F_{df_1,df_2} \sim \frac{\chi_{df_1}^2/df_1}{\chi_{df_2}^2/df_2}$.
+\item For our purposes, any hypothesis test will be right-tailed.
+\item pdf of $F_{df_1,df_2}$ distribution:
+
+\end{enumerate}
+
+```{r,echo=F,out.height='20%'}
+# Load necessary library
+library(ggplot2)
+
+# Set degrees of freedom
+df1 = 3
+df2 = 16
+
+# Define a sequence of x values for plotting
+x_values = seq(0, 5, by = 0.01)
+
+# Calculate the F-distribution pdf for each x value
+pdf_values = df(x_values, df1 = df1, df2 = df2)
+
+# Create a data frame for plotting
+f_distribution_data = data.frame(x = x_values, pdf = pdf_values)
+
+# Plot the F-distribution
+ggplot(f_distribution_data, aes(x = x, y = pdf)) +
+  geom_line(color = "purple", size = 1) +
+  labs(title = expression(paste("F-Distribution with ", df[1] == 3, ", ", df[2] == 16)),
+       x = "x",
+       y = "Density") +
+  theme_minimal()
+```
+
+\newpage
+
+**One Way ANOVA F-test**
+
+ **Step 1:** State the hypotheses.
+\vfill
+
+ **Step 2:** State the level of significance.
+\vfill \vfill
+
+ **Step 3:** Calculate the test statistic.
+\vfill \vfill
+
+ **Step 4:** Calculate the p-value and plot.
+\vfill \vfill
+
+ **Step 5:** Make a statistical decision.
+\vfill
+
+ **Step 6:** Interpret your decision in the context of the problem.
+ \vfill
+ 
+ \newpage
+ 
+
+**ANOVA table**
+
+An ANOVA table summarizes the sources of variability in data by dividing it into "between-group" and "within-group" components. It includes values for sum of squares (SS), degrees of freedom (df), mean square (MS), F-statistic, and p-value.
+
+\begin{table}[h]
+\begin{center}
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{| c | >{\centering\arraybackslash}m{1.5cm} | >{\centering\arraybackslash}m{1.5cm} | >{\centering\arraybackslash}m{1.5cm} | >{\centering\arraybackslash}m{1.5cm} | >{\centering\arraybackslash}m{1.5cm} |}
+\hline
+Source of Variation & df & SS & MS & F & p-value \\ \hline
+Treatment & & & & & \\ \cline{1-6}
+Error (Residual) & & & \\ \cline{1-4}
+Total & & \\ \cline{1-3}
+\end{tabular}
+\end{center}
+\end{table}
+
+**Using R to complete ANOVA**
+
+ Since many of these calculations can be tedious to calculate, a statistical program like R can be used to complete the analysis. 
+ 
+```{r}
+ # GPA data set
+fresh.gpa = c(2.05, 2.20, 2.00, 2.50, 2.75)
+soph.gpa = c(3.00, 2.80, 3.80, 3.60, 3.30)
+junior.gpa = c(3.30, 3.20, 2.30, 2.90, 3.30)
+senior.gpa = c(3.50, 3.10, 2.90, 3.00, 4.00)
+
+# Make one list of all GPAs
+gpa = c(fresh.gpa,soph.gpa,junior.gpa,senior.gpa)
+
+# Create labels
+year = c(rep("fresh",5),rep("soph",5),rep("junior",5),rep("senior",5))
+
+
+# calculate ANOVA
+fit = aov(gpa~year)
+summary(fit)
+```
+
+\newpage
+
+:::{.example}
+Using the R output from the previous page, complete a six-step hypothesis test to whether the mean GPAs at the four college levels are the same at $\alpha=0.05$.
+:::
+
+\newpage
+
+## Multiple Comparison in ANOVA
+
+Suppose that we conclude that the means of the k populations are not all equal. Which populations means do differ?
+
+ Q: Can we just do two-sample t-tests for all pairs of populations?
+ 
+ A: Yes and no. We need to make an adjustment for simultaneously completing a group of tests.
+
+:::{.example}
+In the GPA example, we had four populations. Suppose the null hypothesis is true  ($\mu_1 = \mu_2 = \mu_3 = \mu_4$) and $\alpha=0.05$.
+:::
+
+\vfill
+
+**Tukey's Procedure**
+
+Tukey's Procedure (Tukey's Honest Significant Difference or Tukey HSD) is a multiple comparisons procedure to account for completing a number of simultaneous tests.
+
+Confidence intervals for the difference in means ($\mu_i - \mu_j$) can be computed using Tukey's Procedure. These calculations utilize another continuous distribution, the studentized range distribution (Q).
+
+While these calculations can be completed by hand, we'll focus on calculating them in R.
+
+\newpage
+
+:::{.example}
+Returning to the GPA data set, determine which population means differ at $\alpha=0.05$ using a Tukey adjustment.
+:::
+
+```{r}
+TukeyHSD(fit)
+```
+
+
+```{r,out.width="90%"}
+# options for clean y-axis labels
+par(las = 1)
+par(mar = c(5, 8, 4, 2))
+
+plot(TukeyHSD(fit))
+```
+
+\newpage
+
+## R Companion for Chapter 10
+
+:::{.example}
+This example uses the \textbf{chickwts} dataset again. This dataset include 71 observations of the growth rate of chickens using a variety of feed supplements. The boxplot is produced again below.
+:::
+
+```{r}
+data(chickwts)
+boxplot(weight~feed,data=chickwts)
+```
+
+Using the theory from Chapter 10, we are ready to test if there is evidence of a difference in mean weights of chicks for the six types of feed. Our ANOVA F-test hypotheses will be:\\ $H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu_5 = \mu_6$ vs. $H_a: $ at least one $\mu_i$ differs ($i=1,2,3,4,5,6$).\\
+
+Let's run this F-test at $\alpha = 0.01$.
+
+```{r}
+fit = aov(weight~feed,data=chickwts)
+summary(fit)
+```
+
+The resulting F-test statistic is $F_{test} = 15.37$ ($df_1 = 5, df_2 = 65$) and a p-value of $5.94 \cdot 10^{-10}$. At a significance level of $\alpha = 0.01$, we would reject $H_0$ and conclude that at least one of the true mean weights differs by diet.
+
+\newpage
+
+Which $\mu_i$ differ? We can answer this by running all pairwise comparisons of $\mu_i$ and $\mu_j$ ($i \neq j$) and making a multiple comparisons adjustment. Let's use a family-wise error rate of $\alpha = 0.01$.
+
+```{r}
+TukeyHSD(fit,conf.level = 0.99)
+```
+
+There are several statistically significant differences in mean chick weights at $\alpha=0.01$.\
+
+Casein differs from horsebean, linseed, and soybean.\
+Horsebean differs from casein, meatmeal, soybean, and sunflower.\
+Linseed differs from casein and sunflower.\
+Meatmeal differs from horsebean.\
+Sunflower differs from horsebean, linseed, and soybean.\
+Soybean differs from sunflower, horsebean, and casein.
+
+\newpage
+
+```{r}
+plot(TukeyHSD(fit,conf.level = 0.99))
+```
+

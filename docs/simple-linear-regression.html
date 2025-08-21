@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Simple Linear Regression | STAT 315 Notes</title>
+  <meta name="description" content="Chapter 11 Simple Linear Regression | STAT 315 Notes" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Simple Linear Regression | STAT 315 Notes" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Simple Linear Regression | STAT 315 Notes" />
+  
+  
+  
+
+<meta name="author" content="Colorado State University" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="analysis-of-variance-anova.html"/>
+<link rel="next" href="multiple-regression.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preliminaries</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#getting-started-with-r"><i class="fa fa-check"></i>Getting Started With R</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#installing-r"><i class="fa fa-check"></i>Installing R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html"><i class="fa fa-check"></i><b>1</b> Basic Concepts of Statistics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#populations-samples-and-processes"><i class="fa fa-check"></i><b>1.1</b> Populations, Samples, and Processes</a></li>
+<li class="chapter" data-level="1.2" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#methods-of-collecting-a-sample"><i class="fa fa-check"></i><b>1.2</b> Methods of Collecting a Sample</a></li>
+<li class="chapter" data-level="1.3" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#types-of-data"><i class="fa fa-check"></i><b>1.3</b> Types of Data</a></li>
+<li class="chapter" data-level="1.4" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#summarizing-qualitative-data"><i class="fa fa-check"></i><b>1.4</b> Summarizing Qualitative Data</a></li>
+<li class="chapter" data-level="1.5" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#visualizing-quantitative-data"><i class="fa fa-check"></i><b>1.5</b> Visualizing Quantitative Data</a></li>
+<li class="chapter" data-level="1.6" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#summary-statistics-for-quantitative-data"><i class="fa fa-check"></i><b>1.6</b> Summary Statistics for Quantitative Data</a></li>
+<li class="chapter" data-level="1.7" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#notation-for-population-parameters-and-sample-statistics"><i class="fa fa-check"></i><b>1.7</b> Notation for Population Parameters and Sample Statistics</a></li>
+<li class="chapter" data-level="1.8" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#descriptive-statistics-vs.-inferential-statistics"><i class="fa fa-check"></i><b>1.8</b> Descriptive Statistics vs. Inferential Statistics</a></li>
+<li class="chapter" data-level="1.9" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#r-companion-for-chapter-1"><i class="fa fa-check"></i><b>1.9</b> R Companion for Chapter 1</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>2</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="probability.html"><a href="probability.html#sample-space-and-events"><i class="fa fa-check"></i><b>2.1</b> Sample Space and Events</a></li>
+<li class="chapter" data-level="2.2" data-path="probability.html"><a href="probability.html#set-theory"><i class="fa fa-check"></i><b>2.2</b> Set Theory</a></li>
+<li class="chapter" data-level="2.3" data-path="probability.html"><a href="probability.html#axioms-and-rules-of-probability"><i class="fa fa-check"></i><b>2.3</b> Axioms and Rules of Probability</a></li>
+<li class="chapter" data-level="2.4" data-path="probability.html"><a href="probability.html#counting-techniques"><i class="fa fa-check"></i><b>2.4</b> Counting Techniques</a></li>
+<li class="chapter" data-level="2.5" data-path="probability.html"><a href="probability.html#conditional-probability"><i class="fa fa-check"></i><b>2.5</b> Conditional Probability</a></li>
+<li class="chapter" data-level="2.6" data-path="probability.html"><a href="probability.html#independence"><i class="fa fa-check"></i><b>2.6</b> Independence</a></li>
+<li class="chapter" data-level="2.7" data-path="probability.html"><a href="probability.html#objective-vs.-subjective-probability"><i class="fa fa-check"></i><b>2.7</b> Objective vs. Subjective Probability</a></li>
+<li class="chapter" data-level="2.8" data-path="probability.html"><a href="probability.html#r-companion-for-chapter-2"><i class="fa fa-check"></i><b>2.8</b> R Companion for Chapter 2</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html"><i class="fa fa-check"></i><b>3</b> Discrete Random Variables</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#random-variables"><i class="fa fa-check"></i><b>3.1</b> Random Variables</a></li>
+<li class="chapter" data-level="3.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#probability-distributions-for-discrete-random-variables"><i class="fa fa-check"></i><b>3.2</b> Probability Distributions for Discrete Random Variables</a></li>
+<li class="chapter" data-level="3.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expected-values-means"><i class="fa fa-check"></i><b>3.3</b> Expected Values (Means)</a></li>
+<li class="chapter" data-level="3.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#bernoulli-and-binomial-random-variables"><i class="fa fa-check"></i><b>3.4</b> Bernoulli and Binomial Random Variables</a></li>
+<li class="chapter" data-level="3.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#geometric-discrete-uniform-and-poisson-random-variables"><i class="fa fa-check"></i><b>3.5</b> Geometric, Discrete Uniform, and Poisson Random Variables</a></li>
+<li class="chapter" data-level="3.6" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#r-companion-for-chapter-3"><i class="fa fa-check"></i><b>3.6</b> R Companion for Chapter 3</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html"><i class="fa fa-check"></i><b>4</b> Continuous Random Variables</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#probability-density-function-pdf"><i class="fa fa-check"></i><b>4.1</b> Probability Density Function (pdf)</a></li>
+<li class="chapter" data-level="4.2" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#cumulative-distribution-functions"><i class="fa fa-check"></i><b>4.2</b> Cumulative Distribution Functions</a></li>
+<li class="chapter" data-level="4.3" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#expected-values"><i class="fa fa-check"></i><b>4.3</b> Expected Values</a></li>
+<li class="chapter" data-level="4.4" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#normal-distribution"><i class="fa fa-check"></i><b>4.4</b> Normal Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#the-exponential-and-uniform-random-variables"><i class="fa fa-check"></i><b>4.5</b> The Exponential and Uniform Random Variables</a></li>
+<li class="chapter" data-level="4.6" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#continuous-uniformab-random-variable"><i class="fa fa-check"></i><b>4.6</b> (Continuous) Uniform[a,b] Random Variable</a></li>
+<li class="chapter" data-level="4.7" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#r-companion-for-chapter-4"><i class="fa fa-check"></i><b>4.7</b> R Companion for Chapter 4</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html"><i class="fa fa-check"></i><b>5</b> Multivariate Random Variables</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#joint-probability-distributions"><i class="fa fa-check"></i><b>5.1</b> Joint Probability Distributions</a></li>
+<li class="chapter" data-level="5.2" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#marginal-probability-functions"><i class="fa fa-check"></i><b>5.2</b> Marginal Probability Functions</a></li>
+<li class="chapter" data-level="5.3" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#independent-random-variables"><i class="fa fa-check"></i><b>5.3</b> Independent Random Variables</a></li>
+<li class="chapter" data-level="5.4" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#conditional-distributions"><i class="fa fa-check"></i><b>5.4</b> Conditional Distributions</a></li>
+<li class="chapter" data-level="5.5" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#expected-values-covariance-and-correlation"><i class="fa fa-check"></i><b>5.5</b> Expected Values, Covariance, and Correlation</a></li>
+<li class="chapter" data-level="5.6" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#bivariate-normal-distribution"><i class="fa fa-check"></i><b>5.6</b> Bivariate Normal Distribution</a></li>
+<li class="chapter" data-level="5.7" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#r-companion-for-chapter-5"><i class="fa fa-check"></i><b>5.7</b> R Companion for Chapter 5</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html"><i class="fa fa-check"></i><b>6</b> Sampling Distributions, Central Limit Theorem, and Estimation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#statistics-and-their-distributions"><i class="fa fa-check"></i><b>6.1</b> Statistics and Their Distributions</a></li>
+<li class="chapter" data-level="6.2" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#the-distribution-of-the-sample-mean"><i class="fa fa-check"></i><b>6.2</b> The Distribution of the Sample Mean</a></li>
+<li class="chapter" data-level="6.3" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#several-general-concepts-of-point-estimation"><i class="fa fa-check"></i><b>6.3</b> Several General Concepts of Point Estimation</a></li>
+<li class="chapter" data-level="6.4" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#methods-of-point-estimation"><i class="fa fa-check"></i><b>6.4</b> Methods of Point Estimation</a></li>
+<li class="chapter" data-level="6.5" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#r-companion-for-chapter-6"><i class="fa fa-check"></i><b>6.5</b> R Companion for Chapter 6</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html"><i class="fa fa-check"></i><b>7</b> Confidence Intervals for One Population Parameter</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#basic-concepts-of-confidence-intervals"><i class="fa fa-check"></i><b>7.1</b> Basic Concepts of Confidence Intervals</a></li>
+<li class="chapter" data-level="7.2" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#large-sample-confidence-intervals-for-a-population-mean-and-proportion"><i class="fa fa-check"></i><b>7.2</b> Large-Sample Confidence Intervals for a Population Mean and Proportion</a></li>
+<li class="chapter" data-level="7.3" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#intervals-based-on-a-normal-population-distribution"><i class="fa fa-check"></i><b>7.3</b> Intervals Based on a Normal Population Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html"><i class="fa fa-check"></i><b>8</b> Hypothesis Tests for One Population Parameter</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#basic-concepts-of-hypothesis-testing"><i class="fa fa-check"></i><b>8.1</b> Basic Concepts of Hypothesis Testing</a></li>
+<li class="chapter" data-level="8.2" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#tests-about-a-population-mean-mu"><i class="fa fa-check"></i><b>8.2</b> Tests About a Population Mean, <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="8.3" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#tests-concerning-a-population-proportion-p"><i class="fa fa-check"></i><b>8.3</b> Tests Concerning a Population Proportion, <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="8.4" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#r-companion-for-chapter-8"><i class="fa fa-check"></i><b>8.4</b> R Companion for Chapter 8</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html"><i class="fa fa-check"></i><b>9</b> Inference Based On Two Samples</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#z-tests-and-confidence-intervals-for-a-difference-between-two-population-parameters"><i class="fa fa-check"></i><b>9.1</b> z-tests and Confidence Intervals for a Difference Between Two Population Parameters</a></li>
+<li class="chapter" data-level="9.2" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#the-two-sample-t-test-and-confidence-interval"><i class="fa fa-check"></i><b>9.2</b> The Two-Sample t-test and Confidence Interval</a></li>
+<li class="chapter" data-level="9.3" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#analysis-of-paired-data"><i class="fa fa-check"></i><b>9.3</b> Analysis of Paired Data</a></li>
+<li class="chapter" data-level="9.4" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#inferences-concerning-a-difference-between-population-proportions"><i class="fa fa-check"></i><b>9.4</b> Inferences Concerning a Difference Between Population Proportions</a></li>
+<li class="chapter" data-level="9.5" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#statistical-power"><i class="fa fa-check"></i><b>9.5</b> Statistical Power</a></li>
+<li class="chapter" data-level="9.6" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#r-companion-for-chapter-9"><i class="fa fa-check"></i><b>9.6</b> R Companion for Chapter 9</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html"><i class="fa fa-check"></i><b>10</b> Analysis of Variance (ANOVA)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#single-factor-anova"><i class="fa fa-check"></i><b>10.1</b> Single-Factor ANOVA</a></li>
+<li class="chapter" data-level="10.2" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#multiple-comparison-in-anova"><i class="fa fa-check"></i><b>10.2</b> Multiple Comparison in ANOVA</a></li>
+<li class="chapter" data-level="10.3" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#r-companion-for-chapter-10"><i class="fa fa-check"></i><b>10.3</b> R Companion for Chapter 10</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>11</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-simple-linear-regression-model"><i class="fa fa-check"></i><b>11.1</b> The Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="11.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#correlation"><i class="fa fa-check"></i><b>11.2</b> Correlation</a></li>
+<li class="chapter" data-level="11.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimating-model-parameters"><i class="fa fa-check"></i><b>11.3</b> Estimating Model Parameters</a></li>
+<li class="chapter" data-level="11.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#assessing-model-fit-and-inferences-for-the-slope-parameter-beta_1"><i class="fa fa-check"></i><b>11.4</b> Assessing Model Fit and Inferences for the Slope Parameter, <span class="math inline">\(\beta_1\)</span></a></li>
+<li class="chapter" data-level="11.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-prediction-of-future-y-values"><i class="fa fa-check"></i><b>11.5</b> The Prediction of Future Y Values</a></li>
+<li class="chapter" data-level="11.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-diagnostics"><i class="fa fa-check"></i><b>11.6</b> Model Diagnostics</a></li>
+<li class="chapter" data-level="11.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#extrapolation"><i class="fa fa-check"></i><b>11.7</b> Extrapolation</a></li>
+<li class="chapter" data-level="11.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#r-companion-for-chapter-11"><i class="fa fa-check"></i><b>11.8</b> R Companion for Chapter 11</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>12</b> Multiple Regression</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="multiple-regression.html"><a href="multiple-regression.html#multiple-regression-model"><i class="fa fa-check"></i><b>12.1</b> Multiple Regression Model</a></li>
+<li class="chapter" data-level="12.2" data-path="multiple-regression.html"><a href="multiple-regression.html#variable-transformations"><i class="fa fa-check"></i><b>12.2</b> Variable Transformations</a></li>
+<li class="chapter" data-level="12.3" data-path="multiple-regression.html"><a href="multiple-regression.html#categorical-variables-interaction-and-polynomial-regression"><i class="fa fa-check"></i><b>12.3</b> Categorical Variables, Interaction, and Polynomial Regression</a></li>
+<li class="chapter" data-level="12.4" data-path="multiple-regression.html"><a href="multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>12.4</b> Polynomial regression</a></li>
+<li class="chapter" data-level="12.5" data-path="multiple-regression.html"><a href="multiple-regression.html#model-and-variable-selection"><i class="fa fa-check"></i><b>12.5</b> Model and Variable Selection</a></li>
+<li class="chapter" data-level="12.6" data-path="multiple-regression.html"><a href="multiple-regression.html#other-considerations"><i class="fa fa-check"></i><b>12.6</b> Other Considerations</a></li>
+<li class="chapter" data-level="12.7" data-path="multiple-regression.html"><a href="multiple-regression.html#r-companion-for-chapter-12"><i class="fa fa-check"></i><b>12.7</b> R Companion for Chapter 12</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">STAT 315 Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="simple-linear-regression" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Simple Linear Regression<a href="simple-linear-regression.html#simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In Chapter 10, we explored ANOVA, a method for examining the relationship between a categorical variable (with three or more groups or treatments) and a quantitative outcome. In this chapter, we shift to simple linear regression, which analyzes the relationship between two quantitative variables. Linear regression allows us to model and predict how changes in one variable are associated with changes in another, providing insights into trends, correlations, and potential causation in data.</p>
+<div id="the-simple-linear-regression-model" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> The Simple Linear Regression Model<a href="simple-linear-regression.html#the-simple-linear-regression-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In many cases, we wish to quantify and analyze the relationship between two quantitative variables, where one variable helps predict or explain the other.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-264" class="example"><strong>Example 11.1  </strong></span>The following data give the speed of cars (mph) and the distances (feet) taken to stop. Note that the data were recorded in the 1920s.</p>
+</div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="simple-linear-regression.html#cb167-1" tabindex="-1"></a><span class="fu">data</span>(cars)</span>
+<span id="cb167-2"><a href="simple-linear-regression.html#cb167-2" tabindex="-1"></a><span class="fu">plot</span>(cars,<span class="at">pch=</span><span class="dv">20</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-134-1.png" width="672" height="20%" style="display: block; margin: auto;" /></p>
+<p><strong>Variables:</strong></p>
+<ul>
+<li><p>X = independent variable / predictor variable / explanatory variable</p></li>
+<li><p>Y = dependent variable / response variable</p></li>
+</ul>
+<p>In <em>simple linear regression</em>, we examine the relationship between a single predictor variable and a single response variable.</p>
+<p>When multiple predictor variables are involved, we use <em>multiple linear regression</em>.</p>
+<p><strong>Goal:</strong> Using a simple random sample, we aim to build a model that represents the relationship between <span class="math inline">\(X\)</span> and
+<span class="math inline">\(Y\)</span> for the population. This model is represented by the <strong>least squares regression line</strong> – the line that best fits the data points, minimizing the sum of squared differences between observed values and the predictions made by the line.</p>
+<p><strong>Estimated Regression Equation:</strong></p>
+<p><strong>Population Model:</strong></p>
+<p><strong>Assumptions and Notes for Simple Linear Regression (SLR):</strong></p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Linearity in the Parameters</strong>: The relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can be described using linear parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> in the equation <span class="math inline">\(Y = \beta_0 + \beta_1 X + \epsilon\)</span>.</p></li>
+<li><p><strong>Error Assumptions</strong>: The errors (<span class="math inline">\(\epsilon_i\)</span>) are independent, identically distributed normal random variables with mean 0 and constant variance <span class="math inline">\(\sigma^2\)</span>. One objective of SLR is to estimate <span class="math inline">\(\sigma^2\)</span>, the variance of these errors.</p></li>
+<li><p><strong>Expected Value of <span class="math inline">\(Y\)</span></strong>: For a given value of <span class="math inline">\(X\)</span>, the mean of <span class="math inline">\(Y\)</span> is represented by the line of best fit:
+<span class="math display">\[E[Y|X] = \beta_0 + \beta_1 X \]</span></p></li>
+<li><p><strong>Estimating <span class="math inline">\(\sigma\)</span></strong>: Because observed data points do not lie exactly on the line of best fit, we estimate <span class="math inline">\(\sigma\)</span> to quantify the spread or variability of data around this line.</p></li>
+</ol>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="correlation" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> Correlation<a href="simple-linear-regression.html#correlation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Recall:</strong> <em>Correlation</em> is a measure of <em>linear relationship</em> between two quantitative variables. The population correlation coefficient is represented by <span class="math inline">\(\rho\)</span> and the sample correlation coefficient is represented by <span class="math inline">\(r\)</span>.</p>
+<p>Correlation is related to covariance, <span class="math inline">\(\rho = \frac{Cov(X,Y)}{\sigma_X \sigma_Y}\)</span>, but it is independent of units and is bounded by <span class="math inline">\(\pm 1\)</span>, i.e., <span class="math inline">\(-1 \leq \rho \leq 1\)</span>.</p>
+<p>If two variables are uncorrelated, then they are not necessarily independent. This could be the case if the variables have a nonlinear relationship.</p>
+<p><span class="math display">\[r = \frac{S_{xy}}{\sqrt{S_{xx}}\sqrt{S_{yy}}}, \text{where } S_{xx} = \sum_{i=1}^n (x_i-\bar{x})^2, S_{yy} = \sum_{i=1}^n (y_i-\bar{y})^2, S_{xy} = \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})\]</span></p>
+<div class="example">
+<p><span id="exm:unlabeled-div-265" class="example"><strong>Example 11.2  </strong></span>Some examples of some scatterplots and their associated sample correlation coefficients.</p>
+</div>
+<p><img src="_main_files/figure-html/unnamed-chunk-135-1.png" width="672" height="50%" style="display: block; margin: auto;" /></p>
+<p><strong>Note: Correlation does not imply causation!</strong></p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="estimating-model-parameters" class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> Estimating Model Parameters<a href="simple-linear-regression.html#estimating-model-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Criterion for determining the line of best fit</strong></p>
+<p>We want to minimize the sum of squared errors (SSE), that is, we want to find <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> that minimize <span class="math inline">\(SSE = \sum_{i=1}^n [y_i - (b_0 + b_1 x)]^2\)</span>.</p>
+<p><strong>Illustration:</strong>
+</p>
+<p><strong>Normal Equations:</strong>
+</p>
+<p><strong>SLR estimates</strong></p>
+<p><span class="math display">\[\text{Estimated Regression Equation: } \hat{y} = b_0 + b_1 x\]</span></p>
+<p><span class="math display">\[b_0 = \bar{y} - b_1 \bar{x}\]</span></p>
+<p><span class="math display">\[b_1 = \frac{S_{xy}}{S_{xx}} = \frac{s_y}{s_x} \cdot r_{xy} = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2}\]</span></p>
+<p><span class="math display">\[S_{xx} = \sum_{i=1}^n (x_i-\bar{x})^2 \qquad S_{yy} = \sum_{i=1}^n (y_i-\bar{y})^2 \qquad S_{xy} = \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})\]</span></p>
+<p><strong>Interpreting <span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_0\)</span></strong></p>
+<p>The estimated slope, <span class="math inline">\(b_1\)</span>, can be interpreted as the estimated change in y for a unit increase in x.</p>
+<p>The estimated intercept, <span class="math inline">\(b_0\)</span>, can be interpreted as the estimated value of y when x is 0.</p>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-266" class="example"><strong>Example 11.3  </strong></span>Fill in the table to calculate the estimated regression equation and plot it on the figure below.</p>
+</div>
+<table style="width:100%;">
+<colgroup>
+<col width="25%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th><span class="math inline">\(\Sigma\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(x_i\)</span></td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(y_i\)</span></td>
+<td>3</td>
+<td>5.5</td>
+<td>5.5</td>
+<td>6.5</td>
+<td>9.5</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(x_i - \bar{x}\)</span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((x_i - \bar{x})^2\)</span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(y_i - \bar{y}\)</span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((x_i - \bar{x})(y_i - \bar{y})\)</span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><img src="_main_files/figure-html/unnamed-chunk-136-1.png" width="672" height="40%" style="display: block; margin: auto 0 auto auto;" /></p>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-267" class="example"><strong>Example 11.4  </strong></span>Here’s how to use R to do the calculations.</p>
+</div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="simple-linear-regression.html#cb168-1" tabindex="-1"></a><span class="co"># enter the data</span></span>
+<span id="cb168-2"><a href="simple-linear-regression.html#cb168-2" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb168-3"><a href="simple-linear-regression.html#cb168-3" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="fl">5.5</span>,<span class="fl">5.5</span>,<span class="fl">6.5</span>,<span class="fl">9.5</span>)</span>
+<span id="cb168-4"><a href="simple-linear-regression.html#cb168-4" tabindex="-1"></a></span>
+<span id="cb168-5"><a href="simple-linear-regression.html#cb168-5" tabindex="-1"></a><span class="co"># run the linear regression and see the results</span></span>
+<span id="cb168-6"><a href="simple-linear-regression.html#cb168-6" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(y<span class="sc">~</span>x)</span>
+<span id="cb168-7"><a href="simple-linear-regression.html#cb168-7" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x)
+## 
+## Residuals:
+##    1    2    3    4    5 
+## -0.2  0.9 -0.5 -0.9  0.7 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)   1.8000     0.9381   1.919   0.1508  
+## x             1.4000     0.2828   4.950   0.0158 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8944 on 3 degrees of freedom
+## Multiple R-squared:  0.8909, Adjusted R-squared:  0.8545 
+## F-statistic:  24.5 on 1 and 3 DF,  p-value: 0.01582</code></pre>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-268" class="example"><strong>Example 11.5  </strong></span>Here is the car stopping distance example given at the beginning of the chapter. Note that we will load the ``cars’’ dataset that is provided in R.</p>
+</div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="simple-linear-regression.html#cb170-1" tabindex="-1"></a><span class="co"># load the data</span></span>
+<span id="cb170-2"><a href="simple-linear-regression.html#cb170-2" tabindex="-1"></a><span class="fu">data</span>(cars)</span>
+<span id="cb170-3"><a href="simple-linear-regression.html#cb170-3" tabindex="-1"></a></span>
+<span id="cb170-4"><a href="simple-linear-regression.html#cb170-4" tabindex="-1"></a><span class="co"># run the regression and summarize the results</span></span>
+<span id="cb170-5"><a href="simple-linear-regression.html#cb170-5" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(dist<span class="sc">~</span>speed,<span class="at">data=</span>cars)</span>
+<span id="cb170-6"><a href="simple-linear-regression.html#cb170-6" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -29.069  -9.525  -2.272   9.215  43.201 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -17.5791     6.7584  -2.601   0.0123 *  
+## speed         3.9324     0.4155   9.464 1.49e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 15.38 on 48 degrees of freedom
+## Multiple R-squared:  0.6511, Adjusted R-squared:  0.6438 
+## F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12</code></pre>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="simple-linear-regression.html#cb172-1" tabindex="-1"></a><span class="co"># plot the data and the line of best fit</span></span>
+<span id="cb172-2"><a href="simple-linear-regression.html#cb172-2" tabindex="-1"></a><span class="fu">plot</span>(dist<span class="sc">~</span>speed,<span class="at">data=</span>cars,<span class="at">pch=</span><span class="dv">20</span>)</span>
+<span id="cb172-3"><a href="simple-linear-regression.html#cb172-3" tabindex="-1"></a><span class="fu">abline</span>(model)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-139-1.png" width="672" height="25%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="assessing-model-fit-and-inferences-for-the-slope-parameter-beta_1" class="section level2 hasAnchor" number="11.4">
+<h2><span class="header-section-number">11.4</span> Assessing Model Fit and Inferences for the Slope Parameter, <span class="math inline">\(\beta_1\)</span><a href="simple-linear-regression.html#assessing-model-fit-and-inferences-for-the-slope-parameter-beta_1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>While an estimated regression equation can be calculated for any set of data pairs, it is essential to determine whether a linear model is appropriate for the data.</p>
+<p>There are multiple ways to assess model fit.</p>
+<ol style="list-style-type: decimal">
+<li>Coefficient of determination, <span class="math inline">\(R^2\)</span></li>
+<li>Linear Regression Hypothesis Test for <span class="math inline">\(b_1\)</span></li>
+<li>Model diagnostics (more on this later)</li>
+</ol>
+<p><strong>ANOVA for Regression</strong></p>
+<p>Often, we wish to analyze the quality of the estimated regression equation line using an <em>analysis of variance approach</em>. In this setup, the total variation of the dependent variable is partitioned into subcomponents.</p>
+<p><span class="math inline">\(\boxed{SST = \sum_{i=1}^n (y_i -\bar{y})^2}\)</span> = total sum of squares = ``total variation’’</p>
+<p><span class="math inline">\(\boxed{df_T = n-1}\)</span> (n = sample size)</p>
+<p><span class="math inline">\(\boxed{SSR = \sum_{i=1}^n (\hat{y_i} - \bar{y})^2}\)</span> = regression sum of squares = “variation explained by the predictor x”</p>
+<p><span class="math inline">\(\boxed{df_R = p}\)</span> (p = number of predictors, p=1 for SLR)</p>
+<p><span class="math inline">\(\boxed{SSE = \sum_{i=1}^n (\hat{y_i} - y_i)^2}\)</span> = error sum of squares = “variation not explained by the predictor x”
+<span class="math inline">\(\boxed{df_E = n-p-1}\)</span></p>
+<p><strong>Note:</strong> We can estimate <span class="math inline">\(\sigma^2\)</span> with <span class="math inline">\(s^2 = MSE\)</span>.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-269" class="example"><strong>Example 11.6  </strong></span>Here’s how to get the ANOVA output for the car stopping example.</p>
+</div>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="simple-linear-regression.html#cb173-1" tabindex="-1"></a><span class="fu">anova</span>(model)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: dist
+##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## speed      1  21186 21185.5  89.567 1.49e-12 ***
+## Residuals 48  11354   236.5                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div style="page-break-after: always;"></div>
+<p><strong>Coefficient of Determination, <span class="math inline">\(R^2\)</span></strong></p>
+<p><span class="math inline">\(\boxed{R^2 = \frac{SSR}{SST}}\)</span></p>
+<p>This is the proportion of the variation in Y that is explained by X.</p>
+<p>Higher <span class="math inline">\(R^2\)</span> is typically preferred and suggests a better “fit” (<em>careful!</em>)</p>
+<p><span class="math inline">\(R^2 = r_{xy}^2\)</span>, where <span class="math inline">\(r_{xy}\)</span> is the correlation coefficient.</p>
+<p></p>
+<p><strong>Linear Regression Hypothesis Test</strong></p>
+<p>Is there a linear relationship between the predictor(s) and the response? <span class="math inline">\(H_0: \beta_1 = 0\)</span> vs. <span class="math inline">\(H_a: \beta_1 \neq 0\)</span></p>
+<p><span class="math inline">\(\boxed{F_{test} = \frac{MSR}{MSE}}\)</span> (<span class="math inline">\(df_1 = p\)</span>, <span class="math inline">\(df_2 = n-p-1\)</span>)</p>
+<p>For SLR, this is equivalent to a t-test.</p>
+<p>If <span class="math inline">\(F_{test}\)</span> is large, then there is evidence that there is a significant linear relationship between the predictor(s) and the response.</p>
+<p></p>
+<div class="example">
+<p><span id="exm:unlabeled-div-270" class="example"><strong>Example 11.7  </strong></span>Let’s look again at regression output for the cars dataset to see the results of the hypothesis test.</p>
+</div>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="simple-linear-regression.html#cb175-1" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -29.069  -9.525  -2.272   9.215  43.201 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -17.5791     6.7584  -2.601   0.0123 *  
+## speed         3.9324     0.4155   9.464 1.49e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 15.38 on 48 degrees of freedom
+## Multiple R-squared:  0.6511, Adjusted R-squared:  0.6438 
+## F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12</code></pre>
+<div style="page-break-after: always;"></div>
+<p><strong>Inferences About the Slope Parameter <span class="math inline">\(\beta_1\)</span></strong></p>
+<p>Assuming we have met the assumptions of linear regression (i.e., IID normal errors), then we can create a confidence interval for <span class="math inline">\(\beta_1\)</span> or run a hypothesis test of linear relationship (<span class="math inline">\(H_0: \beta_1 = 0\)</span> vs. <span class="math inline">\(H_a: \beta_1 \neq 0\)</span>.</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(E[b_1] = \beta_1\)</span> (<span class="math inline">\(b_1\)</span> is an unbiased estimator of <span class="math inline">\(\beta_1\)</span>)</p></li>
+<li><p><span class="math inline">\(Var(b_1) = \sigma_{b_1}^2 = \frac{\sigma^2}{S_{xx}} = \frac{\sigma^2}{\sum (x_i - \bar{x})^2}\)</span></p></li>
+<li><p><span class="math inline">\(s_{b_1} = \frac{s}{\sqrt{S_{xx}}} = \frac{s}{\sqrt{\sum (x_i - \bar{x})^2}}\)</span></p></li>
+<li><p>The estimator <span class="math inline">\(b_1\)</span> has a normal distribution.</p></li>
+<li><p><span class="math inline">\(t = \frac{b_1 - \beta_1}{s_{b_1}}\)</span> has a t-distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom.</p></li>
+</ol>
+<div class="example">
+<p><span id="exm:unlabeled-div-271" class="example"><strong>Example 11.8  </strong></span>Create a 95% confidence interval for <span class="math inline">\(\beta_1\)</span> using the “cars” dataset and determine if there is evidence of a linear relationship between and .</p>
+</div>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="simple-linear-regression.html#cb177-1" tabindex="-1"></a><span class="fu">confint</span>(model)</span></code></pre></div>
+<pre><code>##                  2.5 %    97.5 %
+## (Intercept) -31.167850 -3.990340
+## speed         3.096964  4.767853</code></pre>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="the-prediction-of-future-y-values" class="section level2 hasAnchor" number="11.5">
+<h2><span class="header-section-number">11.5</span> The Prediction of Future Y Values<a href="simple-linear-regression.html#the-prediction-of-future-y-values" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Given a specific value of X (denoted <span class="math inline">\(x_p\)</span>), we can use the estimated regression equation to calculate a point estimate or <strong>fitted value</strong> of Y, denoted <span class="math inline">\(\hat{y}_p\)</span>, by simply plugging <span class="math inline">\(x_p\)</span> into the estimated regression equation. <span class="math inline">\(\hat{y}_p = b_0 + b_1 x_p\)</span></p>
+<p>The <strong>residual</strong> of the i<span class="math inline">\(^{th}\)</span> observation is <span class="math inline">\(r_i = y_i - \hat{y}_i = \text{actual y value} - \text{predicted y value}\)</span>.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-272" class="example"><strong>Example 11.9  </strong></span>Suppose we want to estimate the stopping distance for a car going 20.5mph. We can get this estimate by simply plugging this value into our estimated regression equation. Recall that the estimated regression equation is: <span class="math inline">\(\hat{y} = -17.5791 + 3.9324 x\)</span>.</p>
+</div>
+<p><img src="_main_files/figure-html/unnamed-chunk-143-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<p>In the above example, we computed a point estimate for the stopping distance of a car going 20.5mph. As with other topics we’ve explored so far in statistics, we prefer to have a measure of uncertainty attached with all point estimates.</p>
+<p>For regression, this leads us to two kinds of intervals:</p>
+<ol style="list-style-type: decimal">
+<li><p>Confidence interval for mean response</p></li>
+<li><p>Prediction interval for a new data value</p></li>
+</ol>
+<p><strong>Confidence intervals for mean response</strong> tell us how well we have determined the mean function, <span class="math inline">\(E[Y|X]\)</span>, i.e., the line of best fit.</p>
+<p><strong>Prediction intervals for a new data</strong> value tell us how well we can estimate the dependent value for a given new predictor value.</p>
+<p>These are fundamentally two different kinds of intervals.</p>
+<div style="page-break-after: always;"></div>
+<p><strong>Confidence Interval for Mean Response</strong></p>
+<p>A <strong>confidence interval for mean response</strong> creates an uncertainty estimate for the line of best fit, i.e., the mean function, <span class="math inline">\(E[Y|X]\)</span>.</p>
+<p>In other words, a confidence interval for mean response creates an interval of plausible values for the average response value for a given predictor value.</p>
+<div class="theorem">
+<p><span id="thm:unlabeled-div-273" class="theorem"><strong>Theorem 11.1  </strong></span>Let <span class="math inline">\(x_p\)</span> be the value of the predictor variable and let <span class="math inline">\(\hat{y}_p = b_0 + b_1 x_p\)</span> be the fitted value. Then:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(E[\hat{y}_p] = \beta_0 + \beta_1 x_p\)</span></p></li>
+<li><p><span class="math inline">\(Var(\hat{y}_p) = MSE \cdot \left(\frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)\)</span></p></li>
+<li><p><span class="math inline">\(SE(\hat{y}_p) = \sqrt{MSE \cdot \left(\frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)}\)</span></p></li>
+<li><p>A confidence interval for the mean response is given by:
+<span class="math display">\[\hat{y}_p \pm t_{\alpha/2,n-2} \cdot \sqrt{MSE \cdot \left(\frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)} \]</span></p></li>
+</ol>
+</div>
+<p>The theorem above allows for us to create confidence intervals for <span class="math inline">\(E[y_p]\)</span>, i.e., the mean response for a given x-value.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-274" class="example"><strong>Example 11.10  </strong></span>Create a confidence interval for the mean response stopping distance for a car moving at 20.5 miles per hour. Note: <span class="math inline">\(n=50\)</span>, <span class="math inline">\(\bar{x} = 15.4\)</span>, <span class="math inline">\(\sum (x_i-\bar{x})^2 = 1370\)</span>, <span class="math inline">\(\sqrt{MSE} = 15.38\)</span>, <span class="math inline">\(t_{c.v.}=2.01\)</span>.</p>
+</div>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="simple-linear-regression.html#cb179-1" tabindex="-1"></a><span class="co"># t critical value (95% CI, df=48)</span></span>
+<span id="cb179-2"><a href="simple-linear-regression.html#cb179-2" tabindex="-1"></a><span class="fu">qt</span>(.<span class="dv">975</span>,<span class="dv">48</span>)</span></code></pre></div>
+<pre><code>## [1] 2.010635</code></pre>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="simple-linear-regression.html#cb181-1" tabindex="-1"></a><span class="co"># create confidence interval for mean response at x_p = 20.5</span></span>
+<span id="cb181-2"><a href="simple-linear-regression.html#cb181-2" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">speed=</span><span class="fl">20.5</span>), <span class="at">interval =</span> <span class="st">&quot;confidence&quot;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 63.03528 56.92968 69.14089</code></pre>
+<div style="page-break-after: always;"></div>
+<p>We can also create a simultaneous confidence band for mean response for the entire regression line. Note that these band are parabolic.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-275" class="example"><strong>Example 11.11  </strong></span>Create a 95% confidence band for the mean response of the cars dataset.</p>
+</div>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="simple-linear-regression.html#cb183-1" tabindex="-1"></a><span class="co"># plot the data and the line of best fit</span></span>
+<span id="cb183-2"><a href="simple-linear-regression.html#cb183-2" tabindex="-1"></a><span class="fu">plot</span>(cars)</span>
+<span id="cb183-3"><a href="simple-linear-regression.html#cb183-3" tabindex="-1"></a><span class="fu">abline</span>(model)</span>
+<span id="cb183-4"><a href="simple-linear-regression.html#cb183-4" tabindex="-1"></a></span>
+<span id="cb183-5"><a href="simple-linear-regression.html#cb183-5" tabindex="-1"></a><span class="co"># create a grid of speed values and put into a data frame</span></span>
+<span id="cb183-6"><a href="simple-linear-regression.html#cb183-6" tabindex="-1"></a>speed.grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(cars<span class="sc">$</span>speed), <span class="fu">max</span>(cars<span class="sc">$</span>speed), <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb183-7"><a href="simple-linear-regression.html#cb183-7" tabindex="-1"></a>speed.df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">speed=</span>speed.grid)</span>
+<span id="cb183-8"><a href="simple-linear-regression.html#cb183-8" tabindex="-1"></a></span>
+<span id="cb183-9"><a href="simple-linear-regression.html#cb183-9" tabindex="-1"></a><span class="co"># calculate the confidence interval at each grid point and plot</span></span>
+<span id="cb183-10"><a href="simple-linear-regression.html#cb183-10" tabindex="-1"></a>conf_interval <span class="ot">=</span> <span class="fu">predict</span>(model, <span class="at">newdata=</span>speed.df,</span>
+<span id="cb183-11"><a href="simple-linear-regression.html#cb183-11" tabindex="-1"></a>                        <span class="at">interval=</span><span class="st">&quot;confidence&quot;</span>,<span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb183-12"><a href="simple-linear-regression.html#cb183-12" tabindex="-1"></a><span class="fu">lines</span>(speed.grid, conf_interval[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb183-13"><a href="simple-linear-regression.html#cb183-13" tabindex="-1"></a><span class="fu">lines</span>(speed.grid, conf_interval[,<span class="dv">3</span>], <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-145-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<p>Is it plausible that the mean response at <span class="math inline">\(x_p=20\)</span> mph is 80 feet?</p>
+<div style="page-break-after: always;"></div>
+<p><strong>Prediction Interval for a New Data Value</strong></p>
+<p>A <strong>prediction interval for a new data value</strong> creates an uncertainty estimate for a new data value. Note that this uncertainty is a combination of uncertainty from the line of best fit as well as the uncertainty from a single new observation.</p>
+<p>In other words, a prediction interval for a new data value creates an interval of plausible values for the response value for a given new predictor value.</p>
+<div class="theorem">
+<p><span id="thm:unlabeled-div-276" class="theorem"><strong>Theorem 11.2  </strong></span>Let <span class="math inline">\(x_p\)</span> be the value of the predictor variable and let <span class="math inline">\(\hat{y}_p = b_0 + b_1 x_p\)</span> be the fitted value. Then:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(E[\hat{y}_p] = \beta_0 + \beta_1 x_p\)</span></p></li>
+<li><p><span class="math inline">\(Var(\hat{y}_p) = MSE \cdot \left(1 + \frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)\)</span></p></li>
+<li><p><span class="math inline">\(SE(\hat{y}_p) = \sqrt{MSE \cdot \left(1 +\frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)}\)</span></p></li>
+<li><p>A prediction interval for a new observation is given by:
+<span class="math display">\[\hat{y}_p \pm t_{\alpha/2,n-2} \cdot \sqrt{MSE \cdot \left(1 + \frac{1}{n} + \frac{(x_p - \bar{x})^2}{\sum (x_i -\bar{x})^2}\right)} \]</span></p></li>
+</ol>
+</div>
+<p>The theorem above allows for us to create prediction intervals for <span class="math inline">\(y_p\)</span>, i.e., the response for a new x-value..\</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-277" class="example"><strong>Example 11.12  </strong></span>Create a 95% prediction interval for a car moving at 20.5 miles per hour. Note: <span class="math inline">\(n=50\)</span>, <span class="math inline">\(\bar{x} = 15.4\)</span>, <span class="math inline">\(\sum (x_i-\bar{x})^2 = 1370\)</span>, <span class="math inline">\(\sqrt{MSE} = 15.38\)</span>, <span class="math inline">\(t_{c.v.}=2.01\)</span>.</p>
+</div>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="simple-linear-regression.html#cb184-1" tabindex="-1"></a><span class="co"># create confidence interval for mean response at x_p = 20.5</span></span>
+<span id="cb184-2"><a href="simple-linear-regression.html#cb184-2" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">speed=</span><span class="fl">20.5</span>), <span class="at">interval =</span> <span class="st">&quot;prediction&quot;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 63.03528 31.51555 94.55502</code></pre>
+<div style="page-break-after: always;"></div>
+<p>We can also create a simultaneous prediction band for a new data value for the entire regression line. Note that these band are linear and parallel.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-278" class="example"><strong>Example 11.13  </strong></span>Create a 95% prediction band for a new response of the cars dataset.</p>
+</div>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="simple-linear-regression.html#cb186-1" tabindex="-1"></a><span class="co"># plot the data and the line of best fit</span></span>
+<span id="cb186-2"><a href="simple-linear-regression.html#cb186-2" tabindex="-1"></a><span class="fu">plot</span>(cars)</span>
+<span id="cb186-3"><a href="simple-linear-regression.html#cb186-3" tabindex="-1"></a><span class="fu">abline</span>(model)</span>
+<span id="cb186-4"><a href="simple-linear-regression.html#cb186-4" tabindex="-1"></a></span>
+<span id="cb186-5"><a href="simple-linear-regression.html#cb186-5" tabindex="-1"></a><span class="co"># create a grid of speed values and put into a data frame</span></span>
+<span id="cb186-6"><a href="simple-linear-regression.html#cb186-6" tabindex="-1"></a>speed.grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(cars<span class="sc">$</span>speed), <span class="fu">max</span>(cars<span class="sc">$</span>speed), <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb186-7"><a href="simple-linear-regression.html#cb186-7" tabindex="-1"></a>speed.df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">speed=</span>speed.grid)</span>
+<span id="cb186-8"><a href="simple-linear-regression.html#cb186-8" tabindex="-1"></a></span>
+<span id="cb186-9"><a href="simple-linear-regression.html#cb186-9" tabindex="-1"></a><span class="co"># calculate the confidence interval at each grid point and plot</span></span>
+<span id="cb186-10"><a href="simple-linear-regression.html#cb186-10" tabindex="-1"></a>conf_interval <span class="ot">=</span> <span class="fu">predict</span>(model, <span class="at">newdata=</span>speed.df,</span>
+<span id="cb186-11"><a href="simple-linear-regression.html#cb186-11" tabindex="-1"></a>                        <span class="at">interval=</span><span class="st">&quot;prediction&quot;</span>,<span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb186-12"><a href="simple-linear-regression.html#cb186-12" tabindex="-1"></a><span class="fu">lines</span>(speed.grid, conf_interval[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb186-13"><a href="simple-linear-regression.html#cb186-13" tabindex="-1"></a><span class="fu">lines</span>(speed.grid, conf_interval[,<span class="dv">3</span>], <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-147-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<p>Is it plausible that a car going 20 mph has a stopping distance of 80 feet?</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="model-diagnostics" class="section level2 hasAnchor" number="11.6">
+<h2><span class="header-section-number">11.6</span> Model Diagnostics<a href="simple-linear-regression.html#model-diagnostics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Recall:</strong> Simple linear regression makes a number of assumptions which should be checked to make sure that such a model is appropriate.</p>
+<p><strong>Assumptions:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Linearity:</strong> the mean response of the response variable is a linear function of the predictor variable. In multiple regression, the response variable is a linear combination of the predictor variables.</p></li>
+<li><p><strong>Constant Variance:</strong> different values of the predictor variables have the same variance in their errors. This is also called <em>homoscedasticity</em>.</p></li>
+<li><p><strong>Normal Errors:</strong> all errors are normally distributed (with constant variance).</p></li>
+<li><p><strong>Independent Errors:</strong> all errors are independent.</p></li>
+</ol>
+<p>Examples of how to diagnose assumptions (1)-(3) will be given with toy datasets that either meet or violate the assumptions.</p>
+<p>Here’s how to obtain diagnostic plots in R.</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="simple-linear-regression.html#cb187-1" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(dist<span class="sc">~</span>speed,<span class="at">data=</span>cars)</span>
+<span id="cb187-2"><a href="simple-linear-regression.html#cb187-2" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-149-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+<p><strong>Linearity</strong></p>
+<p>Two toy datasets will be created, one linear and one nonlinear. Residual analysis will be used identify violations to the linearity assumption.</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="simple-linear-regression.html#cb188-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb188-2"><a href="simple-linear-regression.html#cb188-2" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">100</span></span>
+<span id="cb188-3"><a href="simple-linear-regression.html#cb188-3" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">runif</span>(n) <span class="co"># some random x-values</span></span>
+<span id="cb188-4"><a href="simple-linear-regression.html#cb188-4" tabindex="-1"></a>y1 <span class="ot">=</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n,<span class="at">sd=</span><span class="fl">0.1</span>) <span class="co"># linear</span></span>
+<span id="cb188-5"><a href="simple-linear-regression.html#cb188-5" tabindex="-1"></a>y2 <span class="ot">=</span> x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n,<span class="at">sd=</span><span class="fl">0.1</span>) <span class="co"># nonlinear</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-151-1.png" width="672" height="30%" style="display: block; margin: auto;" /><img src="_main_files/figure-html/unnamed-chunk-151-2.png" width="672" height="30%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+<p><strong>Constant Variance</strong></p>
+<p>Two toy datasets will be created, one with constant variance and one with nonconstant. Residual analysis will be used identify violations to the constant variance assumption.</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="simple-linear-regression.html#cb189-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb189-2"><a href="simple-linear-regression.html#cb189-2" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">100</span></span>
+<span id="cb189-3"><a href="simple-linear-regression.html#cb189-3" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">runif</span>(n) <span class="co"># some random x-values</span></span>
+<span id="cb189-4"><a href="simple-linear-regression.html#cb189-4" tabindex="-1"></a>y1 <span class="ot">=</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n,<span class="at">sd=</span><span class="dv">1</span>) <span class="co"># constant variance</span></span>
+<span id="cb189-5"><a href="simple-linear-regression.html#cb189-5" tabindex="-1"></a>y2 <span class="ot">=</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n,<span class="at">sd=</span>x) <span class="co"># nonconstant variance</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-153-1.png" width="672" height="30%" style="display: block; margin: auto;" /><img src="_main_files/figure-html/unnamed-chunk-153-2.png" width="672" height="30%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+<p><strong>Normal Errors</strong></p>
+<p>Two toy datasets will be created, one with normal errors and one with Cauchy errors. A QQ-plot will be used identify violations to the normal errors assumption.</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="simple-linear-regression.html#cb190-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb190-2"><a href="simple-linear-regression.html#cb190-2" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">100</span></span>
+<span id="cb190-3"><a href="simple-linear-regression.html#cb190-3" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">runif</span>(n) <span class="co"># some random x-values</span></span>
+<span id="cb190-4"><a href="simple-linear-regression.html#cb190-4" tabindex="-1"></a>y1 <span class="ot">=</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n,<span class="at">sd=</span><span class="fl">0.1</span>) <span class="co"># normal errors</span></span>
+<span id="cb190-5"><a href="simple-linear-regression.html#cb190-5" tabindex="-1"></a>y2 <span class="ot">=</span> x <span class="sc">+</span> <span class="fu">rcauchy</span>(n,<span class="at">scale =</span> <span class="fl">0.01</span>) <span class="co"># laplace errors</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-155-1.png" width="672" height="30%" style="display: block; margin: auto;" /><img src="_main_files/figure-html/unnamed-chunk-155-2.png" width="672" height="30%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="extrapolation" class="section level2 hasAnchor" number="11.7">
+<h2><span class="header-section-number">11.7</span> Extrapolation<a href="simple-linear-regression.html#extrapolation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Extrapolation</strong></p>
+<p><em>Extrapolation</em> involves using a regression model to predict values outside the observed data range. Such predictions can be unreliable, as relationships may not hold beyond the data limits, and unknown factors can affect outcomes. Caution is advised when extrapolating beyond the observed <span class="math inline">\(X\)</span>-values.</p>
+<p>Here are two examples:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Estimating Housing Prices</strong>: A model based on recent trends might suggest a steady increase in housing prices. However, extrapolating beyond the observed data range could overlook economic shifts or policy changes, resulting in overly optimistic predictions.</p></li>
+<li><p><strong>Drug Dosage Effects</strong>: In medical studies, the relationship between dosage and effectiveness may appear linear within a safe range. Extrapolating to higher doses could ignore toxicity limits, leading to predictions that overestimate benefits and underestimate potential risks.</p></li>
+</ol>
+<div class="example">
+<p><span id="exm:unlabeled-div-279" class="example"><strong>Example 11.14  </strong></span>The age and weight of Aaron’s cat, Ellie, is plotted below for her first 10 months. How much would you predict Ellie weighed after 1000 days? [Caution: Extrapolation!]</p>
+</div>
+<p><img src="_main_files/figure-html/unnamed-chunk-156-1.png" width="672" height="40%" style="display: block; margin: auto;" />
+</p>
+<p>Below is Ellie’s weight up until day 1000. How does this compare with prediction using data up until day 300?</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-157-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<p><img src="images/ellie.jpg" style="width:40.0%" alt="Ellie the Cat" />
+</p>
+</div>
+<div id="r-companion-for-chapter-11" class="section level2 hasAnchor" number="11.8">
+<h2><span class="header-section-number">11.8</span> R Companion for Chapter 11<a href="simple-linear-regression.html#r-companion-for-chapter-11" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="example">
+<p><span id="exm:unlabeled-div-280" class="example"><strong>Example 11.15  </strong></span>The dataset is provided in the base version of R. The data is on the relation between temperature in degrees Celsius and vapor pressure of mercury in millimeters (of mercury).</p>
+</div>
+<p>Let’s begin by looking at the header of the data and calculating the correlation.</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="simple-linear-regression.html#cb191-1" tabindex="-1"></a><span class="fu">data</span>(pressure)</span>
+<span id="cb191-2"><a href="simple-linear-regression.html#cb191-2" tabindex="-1"></a><span class="fu">head</span>(pressure)</span></code></pre></div>
+<pre><code>##   temperature pressure
+## 1           0   0.0002
+## 2          20   0.0012
+## 3          40   0.0060
+## 4          60   0.0300
+## 5          80   0.0900
+## 6         100   0.2700</code></pre>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="simple-linear-regression.html#cb193-1" tabindex="-1"></a><span class="fu">cor</span>(pressure)</span></code></pre></div>
+<pre><code>##             temperature  pressure
+## temperature   1.0000000 0.7577923
+## pressure      0.7577923 1.0000000</code></pre>
+<p>The correlation matrix is given in the example above. The diagonal elements of the correlation matrix shows that any variable is perfectly correlated with itself (i.e., <span class="math inline">\(r_{xx} = 1\)</span>). In the off diagonal, you can see the correlation between the and is 0.758 which a strong, positive linear relationship.</p>
+<div style="page-break-after: always;"></div>
+<p>Let’s fit a simple linear regression model with the being the predictor variable and being the response variable.</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="simple-linear-regression.html#cb195-1" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(pressure<span class="sc">~</span>temperature,<span class="at">data=</span>pressure)</span>
+<span id="cb195-2"><a href="simple-linear-regression.html#cb195-2" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = pressure ~ temperature, data = pressure)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -158.08 -117.06  -32.84   72.30  409.43 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -147.8989    66.5529  -2.222 0.040124 *  
+## temperature    1.5124     0.3158   4.788 0.000171 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 150.8 on 17 degrees of freedom
+## Multiple R-squared:  0.5742, Adjusted R-squared:  0.5492 
+## F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
+<p>The estimated regression is <span class="math inline">\(\hat{pressure} = -147.90 + 1.51 \cdot temperature\)</span>. A one degree Celsius increase in temperate of mercury is associated with an increase of 1.51 in vapor pressure.\</p>
+<div style="page-break-after: always;"></div>
+<p>Is this model appropriate? Let’s plot the data along with the line of best fit.</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="simple-linear-regression.html#cb197-1" tabindex="-1"></a><span class="fu">plot</span>(pressure<span class="sc">~</span>temperature,<span class="at">data=</span>pressure)</span>
+<span id="cb197-2"><a href="simple-linear-regression.html#cb197-2" tabindex="-1"></a><span class="fu">abline</span>(model)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-160-1.png" width="70%" height="40%" style="display: block; margin: auto;" /></p>
+<p>As seen in the above plot, our simple linear regression model is completely inadequate. We could determine that a nonlinearity exists by looking at the first residual diagnostic plot.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="simple-linear-regression.html#cb198-1" tabindex="-1"></a><span class="fu">plot</span>(model,<span class="at">which=</span><span class="dv">1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-161-1.png" width="70%" height="40%" style="display: block; margin: auto;" /></p>
+<p>In this diagnostic plot, we see strong evidence of an unaccounted for nonlinearity as the shape of the graph is not approximately flat.</p>
+<div style="page-break-after: always;"></div>
+<p>Based on the scatterplot on the previous page, there appears to be a possibly exponential relationship between temperature and pressure. Let’s try log transforming pressure and refitting the linear regression model. (Note: Variable transformations are covered in Chapter 12.)</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="simple-linear-regression.html#cb199-1" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">lm</span>(<span class="fu">log</span>(pressure)<span class="sc">~</span>temperature,<span class="at">data=</span>pressure)</span>
+<span id="cb199-2"><a href="simple-linear-regression.html#cb199-2" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = log(pressure) ~ temperature, data = pressure)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.4491 -0.6876  0.2866  0.8716  1.1365 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -6.068144   0.483831  -12.54 5.10e-10 ***
+## temperature  0.039792   0.002296   17.33 3.07e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.096 on 17 degrees of freedom
+## Multiple R-squared:  0.9464, Adjusted R-squared:  0.9433 
+## F-statistic: 300.3 on 1 and 17 DF,  p-value: 3.07e-12</code></pre>
+<div style="page-break-after: always;"></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="simple-linear-regression.html#cb201-1" tabindex="-1"></a><span class="fu">plot</span>(pressure<span class="sc">~</span>temperature,<span class="at">data=</span>pressure)</span>
+<span id="cb201-2"><a href="simple-linear-regression.html#cb201-2" tabindex="-1"></a></span>
+<span id="cb201-3"><a href="simple-linear-regression.html#cb201-3" tabindex="-1"></a>x.new <span class="ot">=</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">350</span></span>
+<span id="cb201-4"><a href="simple-linear-regression.html#cb201-4" tabindex="-1"></a>y.new <span class="ot">=</span> <span class="fu">predict</span>(model2,<span class="at">newdata=</span><span class="fu">list</span>(<span class="at">temperature=</span>x.new,<span class="at">interval=</span><span class="st">&quot;confidence&quot;</span>))</span>
+<span id="cb201-5"><a href="simple-linear-regression.html#cb201-5" tabindex="-1"></a><span class="fu">lines</span>(x.new,<span class="fu">exp</span>(y.new))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-163-1.png" width="70%" height="40%" style="display: block; margin: auto;" /></p>
+<p>This model seems to fit the data better than the untransformed simple linear regression model but is still somewhat inadequate for temperatures greater than 300C. Additionally, the residual diagnostic plot suggest our model is inadequate. A better model should be found if modeling temperatures above 300C is of interest.</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="simple-linear-regression.html#cb202-1" tabindex="-1"></a><span class="fu">plot</span>(model2,<span class="at">which=</span><span class="dv">1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-164-1.png" width="70%" height="40%" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="analysis-of-variance-anova.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multiple-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

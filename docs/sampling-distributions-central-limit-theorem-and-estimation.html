@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Sampling Distributions, Central Limit Theorem, and Estimation | STAT 315 Notes</title>
+  <meta name="description" content="Chapter 6 Sampling Distributions, Central Limit Theorem, and Estimation | STAT 315 Notes" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Sampling Distributions, Central Limit Theorem, and Estimation | STAT 315 Notes" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Sampling Distributions, Central Limit Theorem, and Estimation | STAT 315 Notes" />
+  
+  
+  
+
+<meta name="author" content="Colorado State University" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="multivariate-random-variables.html"/>
+<link rel="next" href="confidence-intervals-for-one-population-parameter.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preliminaries</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#getting-started-with-r"><i class="fa fa-check"></i>Getting Started With R</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#installing-r"><i class="fa fa-check"></i>Installing R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html"><i class="fa fa-check"></i><b>1</b> Basic Concepts of Statistics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#populations-samples-and-processes"><i class="fa fa-check"></i><b>1.1</b> Populations, Samples, and Processes</a></li>
+<li class="chapter" data-level="1.2" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#methods-of-collecting-a-sample"><i class="fa fa-check"></i><b>1.2</b> Methods of Collecting a Sample</a></li>
+<li class="chapter" data-level="1.3" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#types-of-data"><i class="fa fa-check"></i><b>1.3</b> Types of Data</a></li>
+<li class="chapter" data-level="1.4" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#summarizing-qualitative-data"><i class="fa fa-check"></i><b>1.4</b> Summarizing Qualitative Data</a></li>
+<li class="chapter" data-level="1.5" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#visualizing-quantitative-data"><i class="fa fa-check"></i><b>1.5</b> Visualizing Quantitative Data</a></li>
+<li class="chapter" data-level="1.6" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#summary-statistics-for-quantitative-data"><i class="fa fa-check"></i><b>1.6</b> Summary Statistics for Quantitative Data</a></li>
+<li class="chapter" data-level="1.7" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#notation-for-population-parameters-and-sample-statistics"><i class="fa fa-check"></i><b>1.7</b> Notation for Population Parameters and Sample Statistics</a></li>
+<li class="chapter" data-level="1.8" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#descriptive-statistics-vs.-inferential-statistics"><i class="fa fa-check"></i><b>1.8</b> Descriptive Statistics vs. Inferential Statistics</a></li>
+<li class="chapter" data-level="1.9" data-path="basic-concepts-of-statistics.html"><a href="basic-concepts-of-statistics.html#r-companion-for-chapter-1"><i class="fa fa-check"></i><b>1.9</b> R Companion for Chapter 1</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="probability.html"><a href="probability.html"><i class="fa fa-check"></i><b>2</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="probability.html"><a href="probability.html#sample-space-and-events"><i class="fa fa-check"></i><b>2.1</b> Sample Space and Events</a></li>
+<li class="chapter" data-level="2.2" data-path="probability.html"><a href="probability.html#set-theory"><i class="fa fa-check"></i><b>2.2</b> Set Theory</a></li>
+<li class="chapter" data-level="2.3" data-path="probability.html"><a href="probability.html#axioms-and-rules-of-probability"><i class="fa fa-check"></i><b>2.3</b> Axioms and Rules of Probability</a></li>
+<li class="chapter" data-level="2.4" data-path="probability.html"><a href="probability.html#counting-techniques"><i class="fa fa-check"></i><b>2.4</b> Counting Techniques</a></li>
+<li class="chapter" data-level="2.5" data-path="probability.html"><a href="probability.html#conditional-probability"><i class="fa fa-check"></i><b>2.5</b> Conditional Probability</a></li>
+<li class="chapter" data-level="2.6" data-path="probability.html"><a href="probability.html#independence"><i class="fa fa-check"></i><b>2.6</b> Independence</a></li>
+<li class="chapter" data-level="2.7" data-path="probability.html"><a href="probability.html#objective-vs.-subjective-probability"><i class="fa fa-check"></i><b>2.7</b> Objective vs. Subjective Probability</a></li>
+<li class="chapter" data-level="2.8" data-path="probability.html"><a href="probability.html#r-companion-for-chapter-2"><i class="fa fa-check"></i><b>2.8</b> R Companion for Chapter 2</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html"><i class="fa fa-check"></i><b>3</b> Discrete Random Variables</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#random-variables"><i class="fa fa-check"></i><b>3.1</b> Random Variables</a></li>
+<li class="chapter" data-level="3.2" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#probability-distributions-for-discrete-random-variables"><i class="fa fa-check"></i><b>3.2</b> Probability Distributions for Discrete Random Variables</a></li>
+<li class="chapter" data-level="3.3" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#expected-values-means"><i class="fa fa-check"></i><b>3.3</b> Expected Values (Means)</a></li>
+<li class="chapter" data-level="3.4" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#bernoulli-and-binomial-random-variables"><i class="fa fa-check"></i><b>3.4</b> Bernoulli and Binomial Random Variables</a></li>
+<li class="chapter" data-level="3.5" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#geometric-discrete-uniform-and-poisson-random-variables"><i class="fa fa-check"></i><b>3.5</b> Geometric, Discrete Uniform, and Poisson Random Variables</a></li>
+<li class="chapter" data-level="3.6" data-path="discrete-random-variables.html"><a href="discrete-random-variables.html#r-companion-for-chapter-3"><i class="fa fa-check"></i><b>3.6</b> R Companion for Chapter 3</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html"><i class="fa fa-check"></i><b>4</b> Continuous Random Variables</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#probability-density-function-pdf"><i class="fa fa-check"></i><b>4.1</b> Probability Density Function (pdf)</a></li>
+<li class="chapter" data-level="4.2" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#cumulative-distribution-functions"><i class="fa fa-check"></i><b>4.2</b> Cumulative Distribution Functions</a></li>
+<li class="chapter" data-level="4.3" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#expected-values"><i class="fa fa-check"></i><b>4.3</b> Expected Values</a></li>
+<li class="chapter" data-level="4.4" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#normal-distribution"><i class="fa fa-check"></i><b>4.4</b> Normal Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#the-exponential-and-uniform-random-variables"><i class="fa fa-check"></i><b>4.5</b> The Exponential and Uniform Random Variables</a></li>
+<li class="chapter" data-level="4.6" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#continuous-uniformab-random-variable"><i class="fa fa-check"></i><b>4.6</b> (Continuous) Uniform[a,b] Random Variable</a></li>
+<li class="chapter" data-level="4.7" data-path="continuous-random-variables.html"><a href="continuous-random-variables.html#r-companion-for-chapter-4"><i class="fa fa-check"></i><b>4.7</b> R Companion for Chapter 4</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html"><i class="fa fa-check"></i><b>5</b> Multivariate Random Variables</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#joint-probability-distributions"><i class="fa fa-check"></i><b>5.1</b> Joint Probability Distributions</a></li>
+<li class="chapter" data-level="5.2" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#marginal-probability-functions"><i class="fa fa-check"></i><b>5.2</b> Marginal Probability Functions</a></li>
+<li class="chapter" data-level="5.3" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#independent-random-variables"><i class="fa fa-check"></i><b>5.3</b> Independent Random Variables</a></li>
+<li class="chapter" data-level="5.4" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#conditional-distributions"><i class="fa fa-check"></i><b>5.4</b> Conditional Distributions</a></li>
+<li class="chapter" data-level="5.5" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#expected-values-covariance-and-correlation"><i class="fa fa-check"></i><b>5.5</b> Expected Values, Covariance, and Correlation</a></li>
+<li class="chapter" data-level="5.6" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#bivariate-normal-distribution"><i class="fa fa-check"></i><b>5.6</b> Bivariate Normal Distribution</a></li>
+<li class="chapter" data-level="5.7" data-path="multivariate-random-variables.html"><a href="multivariate-random-variables.html#r-companion-for-chapter-5"><i class="fa fa-check"></i><b>5.7</b> R Companion for Chapter 5</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html"><i class="fa fa-check"></i><b>6</b> Sampling Distributions, Central Limit Theorem, and Estimation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#statistics-and-their-distributions"><i class="fa fa-check"></i><b>6.1</b> Statistics and Their Distributions</a></li>
+<li class="chapter" data-level="6.2" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#the-distribution-of-the-sample-mean"><i class="fa fa-check"></i><b>6.2</b> The Distribution of the Sample Mean</a></li>
+<li class="chapter" data-level="6.3" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#several-general-concepts-of-point-estimation"><i class="fa fa-check"></i><b>6.3</b> Several General Concepts of Point Estimation</a></li>
+<li class="chapter" data-level="6.4" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#methods-of-point-estimation"><i class="fa fa-check"></i><b>6.4</b> Methods of Point Estimation</a></li>
+<li class="chapter" data-level="6.5" data-path="sampling-distributions-central-limit-theorem-and-estimation.html"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#r-companion-for-chapter-6"><i class="fa fa-check"></i><b>6.5</b> R Companion for Chapter 6</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html"><i class="fa fa-check"></i><b>7</b> Confidence Intervals for One Population Parameter</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#basic-concepts-of-confidence-intervals"><i class="fa fa-check"></i><b>7.1</b> Basic Concepts of Confidence Intervals</a></li>
+<li class="chapter" data-level="7.2" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#large-sample-confidence-intervals-for-a-population-mean-and-proportion"><i class="fa fa-check"></i><b>7.2</b> Large-Sample Confidence Intervals for a Population Mean and Proportion</a></li>
+<li class="chapter" data-level="7.3" data-path="confidence-intervals-for-one-population-parameter.html"><a href="confidence-intervals-for-one-population-parameter.html#intervals-based-on-a-normal-population-distribution"><i class="fa fa-check"></i><b>7.3</b> Intervals Based on a Normal Population Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html"><i class="fa fa-check"></i><b>8</b> Hypothesis Tests for One Population Parameter</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#basic-concepts-of-hypothesis-testing"><i class="fa fa-check"></i><b>8.1</b> Basic Concepts of Hypothesis Testing</a></li>
+<li class="chapter" data-level="8.2" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#tests-about-a-population-mean-mu"><i class="fa fa-check"></i><b>8.2</b> Tests About a Population Mean, <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="8.3" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#tests-concerning-a-population-proportion-p"><i class="fa fa-check"></i><b>8.3</b> Tests Concerning a Population Proportion, <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="8.4" data-path="hypothesis-tests-for-one-population-parameter.html"><a href="hypothesis-tests-for-one-population-parameter.html#r-companion-for-chapter-8"><i class="fa fa-check"></i><b>8.4</b> R Companion for Chapter 8</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html"><i class="fa fa-check"></i><b>9</b> Inference Based On Two Samples</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#z-tests-and-confidence-intervals-for-a-difference-between-two-population-parameters"><i class="fa fa-check"></i><b>9.1</b> z-tests and Confidence Intervals for a Difference Between Two Population Parameters</a></li>
+<li class="chapter" data-level="9.2" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#the-two-sample-t-test-and-confidence-interval"><i class="fa fa-check"></i><b>9.2</b> The Two-Sample t-test and Confidence Interval</a></li>
+<li class="chapter" data-level="9.3" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#analysis-of-paired-data"><i class="fa fa-check"></i><b>9.3</b> Analysis of Paired Data</a></li>
+<li class="chapter" data-level="9.4" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#inferences-concerning-a-difference-between-population-proportions"><i class="fa fa-check"></i><b>9.4</b> Inferences Concerning a Difference Between Population Proportions</a></li>
+<li class="chapter" data-level="9.5" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#statistical-power"><i class="fa fa-check"></i><b>9.5</b> Statistical Power</a></li>
+<li class="chapter" data-level="9.6" data-path="inference-based-on-two-samples.html"><a href="inference-based-on-two-samples.html#r-companion-for-chapter-9"><i class="fa fa-check"></i><b>9.6</b> R Companion for Chapter 9</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html"><i class="fa fa-check"></i><b>10</b> Analysis of Variance (ANOVA)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#single-factor-anova"><i class="fa fa-check"></i><b>10.1</b> Single-Factor ANOVA</a></li>
+<li class="chapter" data-level="10.2" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#multiple-comparison-in-anova"><i class="fa fa-check"></i><b>10.2</b> Multiple Comparison in ANOVA</a></li>
+<li class="chapter" data-level="10.3" data-path="analysis-of-variance-anova.html"><a href="analysis-of-variance-anova.html#r-companion-for-chapter-10"><i class="fa fa-check"></i><b>10.3</b> R Companion for Chapter 10</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>11</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-simple-linear-regression-model"><i class="fa fa-check"></i><b>11.1</b> The Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="11.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#correlation"><i class="fa fa-check"></i><b>11.2</b> Correlation</a></li>
+<li class="chapter" data-level="11.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimating-model-parameters"><i class="fa fa-check"></i><b>11.3</b> Estimating Model Parameters</a></li>
+<li class="chapter" data-level="11.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#assessing-model-fit-and-inferences-for-the-slope-parameter-beta_1"><i class="fa fa-check"></i><b>11.4</b> Assessing Model Fit and Inferences for the Slope Parameter, <span class="math inline">\(\beta_1\)</span></a></li>
+<li class="chapter" data-level="11.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-prediction-of-future-y-values"><i class="fa fa-check"></i><b>11.5</b> The Prediction of Future Y Values</a></li>
+<li class="chapter" data-level="11.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-diagnostics"><i class="fa fa-check"></i><b>11.6</b> Model Diagnostics</a></li>
+<li class="chapter" data-level="11.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#extrapolation"><i class="fa fa-check"></i><b>11.7</b> Extrapolation</a></li>
+<li class="chapter" data-level="11.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#r-companion-for-chapter-11"><i class="fa fa-check"></i><b>11.8</b> R Companion for Chapter 11</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>12</b> Multiple Regression</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="multiple-regression.html"><a href="multiple-regression.html#multiple-regression-model"><i class="fa fa-check"></i><b>12.1</b> Multiple Regression Model</a></li>
+<li class="chapter" data-level="12.2" data-path="multiple-regression.html"><a href="multiple-regression.html#variable-transformations"><i class="fa fa-check"></i><b>12.2</b> Variable Transformations</a></li>
+<li class="chapter" data-level="12.3" data-path="multiple-regression.html"><a href="multiple-regression.html#categorical-variables-interaction-and-polynomial-regression"><i class="fa fa-check"></i><b>12.3</b> Categorical Variables, Interaction, and Polynomial Regression</a></li>
+<li class="chapter" data-level="12.4" data-path="multiple-regression.html"><a href="multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>12.4</b> Polynomial regression</a></li>
+<li class="chapter" data-level="12.5" data-path="multiple-regression.html"><a href="multiple-regression.html#model-and-variable-selection"><i class="fa fa-check"></i><b>12.5</b> Model and Variable Selection</a></li>
+<li class="chapter" data-level="12.6" data-path="multiple-regression.html"><a href="multiple-regression.html#other-considerations"><i class="fa fa-check"></i><b>12.6</b> Other Considerations</a></li>
+<li class="chapter" data-level="12.7" data-path="multiple-regression.html"><a href="multiple-regression.html#r-companion-for-chapter-12"><i class="fa fa-check"></i><b>12.7</b> R Companion for Chapter 12</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">STAT 315 Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sampling-distributions-central-limit-theorem-and-estimation" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Sampling Distributions, Central Limit Theorem, and Estimation<a href="sampling-distributions-central-limit-theorem-and-estimation.html#sampling-distributions-central-limit-theorem-and-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In this chapter, we will explore sampling distributions, focusing on the variability of sample statistics, which is crucial for inference. We will then dive into the Central Limit Theorem (CLT), which demonstrates how the distribution of sample means approaches normality as the sample size grows, forming the backbone of many statistical methods. The Law of Large Numbers (LLN) will also be discussed, showing how larger samples tend to provide more accurate estimates of population parameters. Finally, we will introduce point estimation, highlighting how to derive reliable population parameter estimates through sample data and discussing properties such as bias and standard error.</p>
+<div id="statistics-and-their-distributions" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Statistics and Their Distributions<a href="sampling-distributions-central-limit-theorem-and-estimation.html#statistics-and-their-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="definition">
+<p><span id="def:unlabeled-div-183" class="definition"><strong>Definition 6.1  </strong></span>A <strong><em>statistic</em></strong> is any quantity whose value can be calculated from sample data.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-184" class="definition"><strong>Definition 6.2  </strong></span>The random variables <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> are said to form a <strong><em>random sample</em></strong> of size <span class="math inline">\(n\)</span> if <span class="math inline">\(X_i\)</span> are <strong><em>independent and identically distributed (IID)</em></strong>.</p>
+</div>
+<p>In chapter 1, we came across a few statistics. We can measure the center of a sample with the sample mean, <span class="math inline">\(\bar{x}\)</span> and the sample median, <span class="math inline">\(\tilde{x}\)</span>. If we want to describe the spread of a sample, there are the sample variance (<span class="math inline">\(s^2\)</span>) and sample standard deviation (<span class="math inline">\(s\)</span>).</p>
+<p>In fact, since each random sample could potentially be different, sample statistics have a probability distribution associated with them.</p>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-185" class="example"><strong>Example 6.1  </strong></span>Radon-222 has a half-life (median decay time) of 3.8 days and the the time between particles decaying can be modeled as an exponential(<span class="math inline">\(\lambda = 0.182\)</span>) random variable. This random variable has a mean time of 5.5 days between decays.</p>
+</div>
+<ol style="list-style-type: lower-alpha">
+<li>Simulate 10,000 Radon-222 decay times and plot the data as a histogram.</li>
+</ol>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb111-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb111-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb111-2" tabindex="-1"></a>sims <span class="ot">=</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">10000</span>,<span class="at">rate=</span><span class="fl">0.182</span>)</span>
+<span id="cb111-3"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb111-3" tabindex="-1"></a><span class="fu">hist</span>(sims,<span class="at">main=</span><span class="st">&quot;10,000 simulations of Radon-222 decay times&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-101-1.png" width="50%" height="40%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb112-1" tabindex="-1"></a><span class="fu">mean</span>(sims)</span></code></pre></div>
+<pre><code>## [1] 5.574666</code></pre>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb114-1" tabindex="-1"></a><span class="fu">var</span>(sims)</span></code></pre></div>
+<pre><code>## [1] 30.55352</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Simulate four exponential(<span class="math inline">\(\lambda=0.182\)</span>) random variables five times and calculate the sample mean of each sample.</li>
+</ol>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb116-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb116-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb116-2" tabindex="-1"></a>sample1 <span class="ot">=</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">4</span>,<span class="at">rate=</span><span class="fl">0.182</span>); mean1 <span class="ot">=</span> <span class="fu">mean</span>(sample1)</span>
+<span id="cb116-3"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb116-3" tabindex="-1"></a>sample2 <span class="ot">=</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">4</span>,<span class="at">rate=</span><span class="fl">0.182</span>); mean2 <span class="ot">=</span> <span class="fu">mean</span>(sample2)</span>
+<span id="cb116-4"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb116-4" tabindex="-1"></a>sample3 <span class="ot">=</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">4</span>,<span class="at">rate=</span><span class="fl">0.182</span>); mean3 <span class="ot">=</span> <span class="fu">mean</span>(sample3)</span>
+<span id="cb116-5"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb116-5" tabindex="-1"></a>sample4 <span class="ot">=</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">4</span>,<span class="at">rate=</span><span class="fl">0.182</span>); mean4 <span class="ot">=</span> <span class="fu">mean</span>(sample4)</span>
+<span id="cb116-6"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb116-6" tabindex="-1"></a>sample5 <span class="ot">=</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">4</span>,<span class="at">rate=</span><span class="fl">0.182</span>); mean5 <span class="ot">=</span> <span class="fu">mean</span>(sample5)</span></code></pre></div>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+</th>
+<th style="text-align:center;">
+</th>
+<th style="text-align:center;">
+</th>
+<th style="text-align:center;">
+</th>
+<th style="text-align:center;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<span class="math inline">\(x_1\)</span>
+</td>
+<td style="text-align:center;">
+<span class="math inline">\(x_2\)</span>
+</td>
+<td style="text-align:center;">
+<span class="math inline">\(x_3\)</span>
+</td>
+<td style="text-align:center;">
+<span class="math inline">\(x_4\)</span>
+</td>
+<td style="text-align:center;">
+<span class="math inline">\(\bar{x}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4.1493507
+</td>
+<td style="text-align:center;">
+6.4925427
+</td>
+<td style="text-align:center;">
+0.8005864
+</td>
+<td style="text-align:center;">
+0.7681058
+</td>
+<td style="text-align:center;">
+3.0526464
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.395981
+</td>
+<td style="text-align:center;">
+15.906421
+</td>
+<td style="text-align:center;">
+6.755835
+</td>
+<td style="text-align:center;">
+2.965290
+</td>
+<td style="text-align:center;">
+7.005882
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5.255865
+</td>
+<td style="text-align:center;">
+0.807945
+</td>
+<td style="text-align:center;">
+7.641402
+</td>
+<td style="text-align:center;">
+4.186977
+</td>
+<td style="text-align:center;">
+4.473047
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+6.800020
+</td>
+<td style="text-align:center;">
+24.307331
+</td>
+<td style="text-align:center;">
+5.794193
+</td>
+<td style="text-align:center;">
+5.688154
+</td>
+<td style="text-align:center;">
+10.647424
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10.307886
+</td>
+<td style="text-align:center;">
+3.597509
+</td>
+<td style="text-align:center;">
+1.851283
+</td>
+<td style="text-align:center;">
+3.233405
+</td>
+<td style="text-align:center;">
+4.747521
+</td>
+</tr>
+</tbody>
+</table>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Compute the mean and variance of the five sample means.</li>
+</ol>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb117-1" tabindex="-1"></a>means <span class="ot">=</span> <span class="fu">c</span>(mean1,mean2,mean3,mean4,mean5)</span>
+<span id="cb117-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb117-2" tabindex="-1"></a><span class="fu">mean</span>(means)</span></code></pre></div>
+<pre><code>## [1] 5.985304</code></pre>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb119-1" tabindex="-1"></a><span class="fu">var</span>(means)</span></code></pre></div>
+<pre><code>## [1] 8.799113</code></pre>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Repeat the experiment 10,000 times, that is, simulate 10,000 samples of 4 exponential(<span class="math inline">\(\lambda=0.182\)</span>) random variables. Create a histogram of the sample means and calculate the mean and variance of the sample means.</li>
+</ol>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb121-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-2" tabindex="-1"></a>nsims <span class="ot">=</span> <span class="dv">10000</span></span>
+<span id="cb121-3"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-3" tabindex="-1"></a>means <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,nsims)</span>
+<span id="cb121-4"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-4" tabindex="-1"></a>simdata <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>)</span>
+<span id="cb121-5"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-5" tabindex="-1"></a></span>
+<span id="cb121-6"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsims){</span>
+<span id="cb121-7"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-7" tabindex="-1"></a>  simdata <span class="ot">=</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">4</span>,<span class="at">rate=</span><span class="fl">0.182</span>)</span>
+<span id="cb121-8"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-8" tabindex="-1"></a>  means[i] <span class="ot">=</span> <span class="fu">mean</span>(simdata)</span>
+<span id="cb121-9"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-9" tabindex="-1"></a>}</span>
+<span id="cb121-10"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-10" tabindex="-1"></a></span>
+<span id="cb121-11"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb121-11" tabindex="-1"></a><span class="fu">hist</span>(means,<span class="at">main=</span><span class="st">&quot;10,000 simulations of sample means of 4 Radon-222 decay times&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-105-1.png" width="70%" height="40%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb122-1" tabindex="-1"></a><span class="fu">mean</span>(means)</span></code></pre></div>
+<pre><code>## [1] 5.531811</code></pre>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb124-1" tabindex="-1"></a><span class="fu">var</span>(means)</span></code></pre></div>
+<pre><code>## [1] 7.719361</code></pre>
+<div style="page-break-after: always;"></div>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Simulate 10,000 exponential(<span class="math inline">\(\lambda=0.182\)</span>) random variables and plot the sample mean as a function of sample size.</li>
+</ol>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb126-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb126-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb126-2" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">10000</span>,<span class="at">rate=</span><span class="fl">0.182</span>)</span>
+<span id="cb126-3"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb126-3" tabindex="-1"></a>means <span class="ot">=</span> <span class="fu">cumsum</span>(data) <span class="sc">/</span> <span class="fu">seq_along</span>(data) </span>
+<span id="cb126-4"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb126-4" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>,<span class="at">y=</span>means,<span class="at">type=</span><span class="st">&quot;l&quot;</span>,<span class="at">xlab=</span><span class="st">&quot;n&quot;</span>,<span class="at">ylab=</span><span class="st">&quot;Sample Mean&quot;</span>,</span>
+<span id="cb126-5"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb126-5" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Sample mean as a function of sample size&quot;</span>)</span>
+<span id="cb126-6"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb126-6" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span><span class="sc">/</span>.<span class="dv">182</span>,<span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-106-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div class="theorem">
+<p><span id="thm:unlabeled-div-186" class="theorem"><strong>Theorem 6.1  </strong></span><strong><em>The Law of Large Numbers</em></strong> states that there is a tendency for the sample mean, <span class="math inline">\(\bar{x}\)</span>, to approach the population mean, <span class="math inline">\(\mu\)</span>, as <span class="math inline">\(n \to \infty\)</span>.</p>
+<p>Specifically, if <span class="math inline">\(|E[X]| = \mu &lt; \infty\)</span>, then <span class="math inline">\(\lim_{n\to\infty} 1/n \sum_{n=1}^{\infty} x_i = \lim_{n\to\infty} \bar{x} = \mu\)</span>.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="the-distribution-of-the-sample-mean" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> The Distribution of the Sample Mean<a href="sampling-distributions-central-limit-theorem-and-estimation.html#the-distribution-of-the-sample-mean" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="example">
+<p><span id="exm:unlabeled-div-187" class="example"><strong>Example 6.2  </strong></span>Suppose a historical estimate of the half-life of Radon-222 was 6 days (with corresponding rate <span class="math inline">\(\lambda = 0.1155\)</span>) which in turn has an expected value of 8.66 days. To test the accuracy of this claim, we measured the decay times for 50 Radon-222 particles and found a sample mean of <span class="math inline">\(\bar{x} = 5.67\)</span> and sample variance of <span class="math inline">\(s^2 = 28.94\)</span>. Do we have enough information to reject the claim?</p>
+</div>
+<p>To answer this question, we need to know the distribution of <span class="math inline">\(\bar{X}\)</span> and specifically, we would like to calculate the probability of observing such a sample mean assuming the historical estimate is accurate.</p>
+<div class="theorem">
+<p><span id="thm:unlabeled-div-188" class="theorem"><strong>Theorem 6.2  </strong></span>Let <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> be a random sample from a distribution with mean value <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> and let <span class="math inline">\(\bar{X} = \frac{1}{n} \sum X_i\)</span>. Then:</p>
+<ul>
+<li><span class="math inline">\(E[\bar{X}] = \mu\)</span></li>
+<li><span class="math inline">\(Var(\bar{X}) = \sigma_{\bar{X}}^2 = \frac{\sigma^2}{n}\)</span></li>
+<li><span class="math inline">\(\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}}\)</span></li>
+</ul>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-189" class="example"><strong>Example 6.3  </strong></span>Show that <span class="math inline">\(Var(\bar{X}) = \frac{\sigma^2}{n}\)</span>.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-190" class="definition"><strong>Definition 6.3  </strong></span>If <span class="math inline">\(\hat{\theta}\)</span> is an estimator for <span class="math inline">\(\sigma\)</span>, then the <strong><em>standard error</em></strong> of <span class="math inline">\(\hat{\theta}\)</span> is: <span class="math inline">\(SE(\hat{\theta}) = \sqrt{Var(\hat{\theta})}\)</span>. It is the magnitude of a typical or representative deviation between an estimate and the value of <span class="math inline">\(\theta\)</span>. If the standard error is a function of unknown parameters, then we can estimate it with the <strong><em>estimated standard error</em></strong> which is denoted <span class="math inline">\(s_{\hat{\theta}}\)</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-191" class="example"><strong>Example 6.4  </strong></span>If <span class="math inline">\(X_1, X_2, \ldots, X_{50}\)</span> are iid Uniform[10,20] random variables, then determine <span class="math inline">\(E[\bar{X}]\)</span> and <span class="math inline">\(SE(\bar{X})\)</span>.</p>
+</div>
+<div style="page-break-after: always;"></div>
+<p><strong>Note:</strong> The symbol, <span class="math inline">\(\stackrel{\cdot}{\sim}\)</span>, stands for “approximately distributed as”.</p>
+<div class="theorem">
+<p><span id="thm:unlabeled-div-192" class="theorem"><strong>Theorem 6.3  </strong></span><strong><em>Central Limit Theorem</em></strong>: Let <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> be a random sample from a distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. If n is sufficiently large, <span class="math inline">\(\bar{X}\)</span> has approximately a normal distribution with mean <span class="math inline">\(\mu_{\bar{X}} = \mu\)</span> and variance <span class="math inline">\(\sigma_{\bar{X}}^2 = \sigma^2/n\)</span>. In other words, <span class="math inline">\(\bar{X} \stackrel{\cdot}{\sim} \mathcal{N}(\mu,\sigma^2)\)</span>.</p>
+</div>
+<p>This result is nontrivial and extremely useful! It allows us to determine how likely or unlikely a sample mean is if we are given a hypothesized population mean.</p>
+<p><strong><em>Illustration:</em></strong>
+</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-193" class="example"><strong>Example 6.5  </strong></span>Suppose that <span class="math inline">\(X_1, X_2, \ldots, X_{50}\)</span> is a random sample from an exponential(<span class="math inline">\(\lambda = 0.1155\)</span>) random variable (the historical claim). Determine the approximate sampling distribution of <span class="math inline">\(\bar{X}\)</span>.</p>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-194" class="example"><strong>Example 6.6  </strong></span>Class exercise (if time allows): We will collect data based on the following experiments. Plot a histogram for each instance.</p>
+</div>
+<ol style="list-style-type: lower-alpha">
+<li>Roll your die once and record your number: <span class="math inline">\(\rule{1.5cm}{0.15mm}\)</span></li>
+</ol>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Roll your die twice and record the average of the two die rolls: <span class="math inline">\(\rule{1.5cm}{0.15mm}\)</span></li>
+</ol>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Roll your die ten times and record the average of the ten die rolls: <span class="math inline">\(\rule{1.5cm}{0.15mm}\)</span></li>
+</ol>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-195" class="example"><strong>Example 6.7  </strong></span>Simulate N fair die rolls 10,000 times. Here we will do the simulation for N=5, N=10, and N=50.</p>
+</div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb127-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-2" tabindex="-1"></a>xbar1 <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">10000</span>) <span class="co"># initialize this vector to zeros</span></span>
+<span id="cb127-3"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-3" tabindex="-1"></a>xbar2 <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">10000</span>) <span class="co"># initialize this vector to zeros</span></span>
+<span id="cb127-4"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-4" tabindex="-1"></a>xbar3 <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">10000</span>) <span class="co"># initialize this vector to zeros</span></span>
+<span id="cb127-5"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-5" tabindex="-1"></a></span>
+<span id="cb127-6"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-6" tabindex="-1"></a><span class="co"># 10,000 simulated die rolls for N=5,10,50</span></span>
+<span id="cb127-7"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-7" tabindex="-1"></a><span class="cf">for</span>( i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span> ){</span>
+<span id="cb127-8"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-8" tabindex="-1"></a>  x1 <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">5</span>,<span class="at">replace=</span>T)</span>
+<span id="cb127-9"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-9" tabindex="-1"></a>  xbar1[i] <span class="ot">=</span> <span class="fu">mean</span>(x1)</span>
+<span id="cb127-10"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-10" tabindex="-1"></a>  x2 <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">10</span>,<span class="at">replace=</span>T)</span>
+<span id="cb127-11"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-11" tabindex="-1"></a>  xbar2[i] <span class="ot">=</span> <span class="fu">mean</span>(x2)</span>
+<span id="cb127-12"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-12" tabindex="-1"></a>  x3 <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">50</span>,<span class="at">replace=</span>T)</span>
+<span id="cb127-13"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-13" tabindex="-1"></a>  xbar3[i] <span class="ot">=</span> <span class="fu">mean</span>(x3)</span>
+<span id="cb127-14"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-14" tabindex="-1"></a>}</span>
+<span id="cb127-15"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-15" tabindex="-1"></a></span>
+<span id="cb127-16"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-16" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb127-17"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-17" tabindex="-1"></a><span class="fu">hist</span>(xbar1,<span class="at">main=</span><span class="st">&quot;N=5&quot;</span>,<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">6</span>),<span class="at">prob=</span><span class="cn">TRUE</span>)</span>
+<span id="cb127-18"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-18" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(xbar1),<span class="at">lwd=</span><span class="dv">2</span>,<span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb127-19"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-19" tabindex="-1"></a><span class="fu">hist</span>(xbar2,<span class="at">main=</span><span class="st">&quot;N=10&quot;</span>,<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">6</span>),<span class="at">prob=</span><span class="cn">TRUE</span>)</span>
+<span id="cb127-20"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-20" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(xbar2),<span class="at">lwd=</span><span class="dv">2</span>,<span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb127-21"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-21" tabindex="-1"></a><span class="fu">hist</span>(xbar3,<span class="at">main=</span><span class="st">&quot;N=50&quot;</span>,<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">6</span>),<span class="at">prob=</span><span class="cn">TRUE</span>)</span>
+<span id="cb127-22"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb127-22" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(xbar3),<span class="at">lwd=</span><span class="dv">2</span>,<span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-107-1.png" width="672" height="40%" style="display: block; margin: auto;" /></p>
+<div style="page-break-after: always;"></div>
+<div class="example">
+<p><span id="exm:unlabeled-div-196" class="example"><strong>Example 6.8  </strong></span>Suppose the decay time of Radon-222 follows an exponential distribution with <span class="math inline">\(\lambda = 0.1155\)</span> decays/day (the historical claim). What is the probability that a random sample of 50 Radon particles results in a sample mean of less than 5.67 days/decay? Do you believe the historical claim?</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-197" class="example"><strong>Example 6.9  </strong></span>Suppose <span class="math inline">\(X_1, X_2, \ldots, X_{50}\)</span> are iid Uniform[10,20] random variables. Determine the sampling distribution of <span class="math inline">\(\bar{X}\)</span> and calculate <span class="math inline">\(P(\bar{X}&lt;14)\)</span>.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="several-general-concepts-of-point-estimation" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Several General Concepts of Point Estimation<a href="sampling-distributions-central-limit-theorem-and-estimation.html#several-general-concepts-of-point-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="definition">
+<p><span id="def:unlabeled-div-198" class="definition"><strong>Definition 6.4  </strong></span>A <strong><em>point estimate</em></strong> of a parameter <span class="math inline">\(\theta\)</span> is a single number that can be regarded as a sensible value for <span class="math inline">\(\theta\)</span> and is often denoted with a hat (i.e., <span class="math inline">\(\hat{\theta}\)</span>). A point estimate is obtained by selecting a suitable statistic and computing its value from the given sample data. The selected statistic, <span class="math inline">\(\hat{\theta}\)</span>, is called the <strong><em>point estimator</em></strong> of <span class="math inline">\(\theta\)</span>.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-199" class="example"><strong>Example 6.10  </strong></span></p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(\bar{X} = \frac{1}{n} \sum_{i=1}^n X_i\)</span></p></li>
+<li><p><span class="math inline">\(S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i -\bar{X})^2\)</span></p></li>
+</ol>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-200" class="definition"><strong>Definition 6.5  </strong></span>The <strong><em>bias</em></strong> of a point estimator <span class="math inline">\(\hat{\theta}\)</span> for a parameter <span class="math inline">\(\theta\)</span> is defined as <span class="math inline">\(Bias[\hat{\theta}] = E[\hat{\theta}] - \theta\)</span>.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-201" class="definition"><strong>Definition 6.6  </strong></span>A statistic <span class="math inline">\(\hat{\theta}\)</span> is called an <strong><em>unbiased estimator</em></strong> of the parameter <span class="math inline">\(\theta\)</span> if <span class="math inline">\(E[\hat{\theta}] = \theta\)</span>.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-202" class="example"><strong>Example 6.11  </strong></span><span class="math inline">\(\bar{X}\)</span> is an unbiased estimator for <span class="math inline">\(\mu\)</span>.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-203" class="example"><strong>Example 6.12  </strong></span>Which of the following two estimators for <span class="math inline">\(\sigma^2\)</span> is unbiased for <span class="math inline">\(\sigma^2\)</span>?</p>
+<ul>
+<li><span class="math inline">\(S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i -\bar{X})^2\)</span></li>
+</ul>
+<ul>
+<li><span class="math inline">\(\gamma = \frac{1}{n} \sum_{i=1}^n (X_i -\bar{X})^2\)</span></li>
+</ul>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-204" class="definition"><strong>Definition 6.7  </strong></span>The <strong><em>mean squared error (MSE)</em></strong> of an estimator <span class="math inline">\(\hat{\theta}\)</span> of a parameter <span class="math inline">\(\theta\)</span> is defined by <span class="math inline">\(E[(\hat{\theta} - \theta)^2] = Var + Bias^2\)</span>.</p>
+</div>
+<p>Typically, unbiased estimators are preferred though some advanced methods consider biased estimators that minimize MSE.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-205" class="example"><strong>Example 6.13  </strong></span>Suppose <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> are exponential(<span class="math inline">\(\lambda\)</span>) random variables. Is <span class="math inline">\(\bar{X}\)</span> an unbiased estimator for <span class="math inline">\(\lambda\)</span>?</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-206" class="example"><strong>Example 6.14  </strong></span>Suppose <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> are Poisson(<span class="math inline">\(\lambda\)</span>) random variables. Is <span class="math inline">\(\bar{X}\)</span> an unbiased estimator for <span class="math inline">\(\lambda\)</span>?</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="methods-of-point-estimation" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Methods of Point Estimation<a href="sampling-distributions-central-limit-theorem-and-estimation.html#methods-of-point-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There are a variety of ways to obtain a point estimate. These methods include:</p>
+<ul>
+<li><p>Method of Moments</p></li>
+<li><p>Maximum Likelihood Estimation</p></li>
+<li><p>Bayesian Estimation</p></li>
+</ul>
+<p>While we won’t cover how these estimation methods are completed, we will compare different estimators. Each of these methods could produce a different point estimate.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-207" class="example"><strong>Example 6.15  </strong></span>Suppose <span class="math inline">\(X_1, X_2, X_3\)</span> are a random sample of <span class="math inline">\(\mathcal{N}(\mu=10,\sigma^2=4)\)</span>. Four estimators are given below. Determine if each estimator is unbiased and calculate its standard error. Which of the four estimators is preferred for estimating <span class="math inline">\(\mu\)</span>?</p>
+</div>
+<ol style="list-style-type: lower-alpha">
+<li><p><span class="math inline">\(\hat{Y_1} = \frac{X_1 + X_2 + X_3}{3}\)</span> </p></li>
+<li><p><span class="math inline">\(\hat{Y_2} = \frac{X_1}{2}+\frac{X_2}{4}+\frac{X_3}{4}\)</span> </p></li>
+<li><p><span class="math inline">\(\hat{Y_3} = X_1\)</span> </p></li>
+<li><p><span class="math inline">\(\hat{Y_4} = \frac{X_1+X_2+X_3}{2}\)</span> </p></li>
+</ol>
+</div>
+<div id="r-companion-for-chapter-6" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> R Companion for Chapter 6<a href="sampling-distributions-central-limit-theorem-and-estimation.html#r-companion-for-chapter-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="example">
+<p><span id="exm:unlabeled-div-208" class="example"><strong>Example 6.16  </strong></span>What does the distribution of the sample means of independent (continuous) uniform random variables look like? The Central Limit Theorem tells us that for a large sample size, the distribution of such means will be approximately normally distributed. Let’s see this in action.</p>
+<p>Suppose we know a bus arrives once per hour at a designated stop but we don’t know when the next bus is and we don’t know when the last bus came. We will model this as a continuous uniform[0,60] random variable. In other words, the next bus could come in anywhere from 0 to 60 minutes with all possibilities being equally likely. In the code below, we simulate 10,000 uniform[0,60] random variables and look at the histogram of results.</p>
+</div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb128-1" tabindex="-1"></a><span class="co"># Generate 10,000 uniform[0,60] random varibles</span></span>
+<span id="cb128-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb128-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb128-3"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb128-3" tabindex="-1"></a>bus <span class="ot">=</span> <span class="fu">runif</span>(<span class="dv">10000</span>,<span class="dv">0</span>,<span class="dv">60</span>)</span>
+<span id="cb128-4"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb128-4" tabindex="-1"></a><span class="fu">hist</span>(bus)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-108-1.png" width="70%" height="40%" style="display: block; margin: auto;" /></p>
+<p>The mean and variance of this sampling distribution is calculated below.</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb129-1" tabindex="-1"></a><span class="fu">mean</span>(bus)</span></code></pre></div>
+<pre><code>## [1] 29.79179</code></pre>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb131-1" tabindex="-1"></a><span class="fu">var</span>(bus)</span></code></pre></div>
+<pre><code>## [1] 298.1569</code></pre>
+<p>From chapter 4, we know that if <span class="math inline">\(X \sim Uniform[a,b]\)</span>, then <span class="math inline">\(E[X] = \frac{b+a}{2}\)</span> and <span class="math inline">\(Var(X) = \frac{(b-a)^2}{12}\)</span>. For a uniform[0,60] random variable, we get the theoretical values of <span class="math inline">\(E[X] = \frac{60+0}{2}=30\)</span> and <span class="math inline">\(Var(X)=\frac{(60-0)^2}{12}=300\)</span>. Our simulated values are very close to these theoretical values.</p>
+<div style="page-break-after: always;"></div>
+<p>Now, let’s suppose we have to wait for two buses, each being modeled as an independent uniform[0,60]. Let’s look at the sampling distribution for the mean of the two bus wait times.</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb133-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-2" tabindex="-1"></a>bus2 <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">10000</span>) <span class="co"># initialize this vector to zeros</span></span>
+<span id="cb133-3"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-3" tabindex="-1"></a></span>
+<span id="cb133-4"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-4" tabindex="-1"></a><span class="co"># 10,000 simulations of 2 bus waits</span></span>
+<span id="cb133-5"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-5" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>){</span>
+<span id="cb133-6"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-6" tabindex="-1"></a>x1 <span class="ot">=</span> <span class="fu">runif</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">60</span>) <span class="co"># n=2</span></span>
+<span id="cb133-7"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-7" tabindex="-1"></a>bus2[i] <span class="ot">=</span> <span class="fu">mean</span>(x1)</span>
+<span id="cb133-8"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-8" tabindex="-1"></a>}</span>
+<span id="cb133-9"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-9" tabindex="-1"></a></span>
+<span id="cb133-10"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb133-10" tabindex="-1"></a><span class="fu">mean</span>(bus2)</span></code></pre></div>
+<pre><code>## [1] 29.90972</code></pre>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb135-1" tabindex="-1"></a><span class="fu">var</span>(bus2)</span></code></pre></div>
+<pre><code>## [1] 149.6154</code></pre>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb137-1" tabindex="-1"></a><span class="fu">hist</span>(bus2)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-110-1.png" width="70%" height="40%" style="display: block; margin: auto;" /></p>
+<p>Notice that the average of two bus waits is no longer uniform and instead has more of a triangular shape. Our simulations of two bus waits had a mean of 30.05955 and variance of 151.2226. From chapter 6, we know that <span class="math inline">\(E[\bar{X}]=\mu\)</span> and <span class="math inline">\(Var(\bar{X})=\frac{\sigma^2}{n}\)</span>.</p>
+<p>For this simulation, the theoretical values for these quantities are <span class="math inline">\(E[\bar{X}]=\mu=30\)</span> and <span class="math inline">\(Var(\bar{X})=\frac{\sigma^2}{n}=\frac{300}{2}=150\)</span>. Again, our simulations give values very close to the theoretical values.</p>
+<div style="page-break-after: always;"></div>
+<p>Finally, let’s suppose that we repeat the experiment for 30 days straight and look at the distribution of sample means of 30 days. We will simulate these 30 day periods 10,000 times.</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb138-2"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-2" tabindex="-1"></a>bus30 <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">10000</span>) <span class="co"># initialize this vector to zeros</span></span>
+<span id="cb138-3"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-3" tabindex="-1"></a></span>
+<span id="cb138-4"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-4" tabindex="-1"></a><span class="co"># 10,000 simulations of 2 bus waits</span></span>
+<span id="cb138-5"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-5" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>){</span>
+<span id="cb138-6"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-6" tabindex="-1"></a>x2 <span class="ot">=</span> <span class="fu">runif</span>(<span class="dv">30</span>,<span class="dv">0</span>,<span class="dv">60</span>) <span class="co"># n=30</span></span>
+<span id="cb138-7"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-7" tabindex="-1"></a>bus30[i] <span class="ot">=</span> <span class="fu">mean</span>(x2)</span>
+<span id="cb138-8"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-8" tabindex="-1"></a>}</span>
+<span id="cb138-9"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-9" tabindex="-1"></a></span>
+<span id="cb138-10"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb138-10" tabindex="-1"></a><span class="fu">mean</span>(bus30)</span></code></pre></div>
+<pre><code>## [1] 29.97879</code></pre>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb140-1" tabindex="-1"></a><span class="fu">var</span>(bus30)</span></code></pre></div>
+<pre><code>## [1] 10.19619</code></pre>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="sampling-distributions-central-limit-theorem-and-estimation.html#cb142-1" tabindex="-1"></a><span class="fu">hist</span>(bus30)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-111-1.png" width="70%" height="40%" style="display: block; margin: auto;" /></p>
+<p>Our simulations of 30 bus waits had a mean of 30.00598 and variance of 10.08975. The theoretical values for this simulation are <span class="math inline">\(E[\bar{X}]=\mu = 30\)</span> and <span class="math inline">\(Var(\bar{X})=\frac{\sigma^2}{n} = \frac{300}{30}=10\)</span>.</p>
+<p>Notice that the distribution of sample means is narrower for n=30 than n=2 and the variance is lower when a larger sample size is used. Also note that the distribution is somewhat bell-shaped.</p>
+<p>In the coming chapters on Inferential Statistics, we will use the fact that the Central Limit Theorem states that the sampling distribution of sample means is approximately normally distributed.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="multivariate-random-variables.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="confidence-intervals-for-one-population-parameter.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
